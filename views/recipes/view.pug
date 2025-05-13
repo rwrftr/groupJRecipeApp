@@ -181,7 +181,26 @@ block content
               h5.card-title.mb-0 
                 i.fas.fa-comments.me-2
                 | Comments (#{comments ? comments.length : 0})
+            
+            //- --- Leave a comment (only when logged in) ---
+            if user
+              .card-body.border-bottom
+                form(action=`/recipes/${recipe.id}/comment`, method="POST")
+                  .mb-3
+                    label.form-label(for="content") Add a Comment
+                    textarea.form-control#content(
+                      name="content",
+                      rows="3",
+                      placeholder="Share your thoughts about this recipe...",
+                      required)
+                  button.btn.btn-primary(type="submit") Post Comment
 
+            //- --- List existing comments ---
+            if comments && comments.length > 0
+              //- comments ui
+            else
+              .card-body.text-center.py-4
+                p.text-muted No comments yet. Be the first to comment!
     else
       .alert.alert-warning
         h2.text-center Recipe not found

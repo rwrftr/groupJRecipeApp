@@ -80,3 +80,31 @@ function initializeFormValidation() {
 // -------------------------
 // Image Preview
 // -------------------------
+function initializeImagePreview() {
+  // Find all file inputs that accept images
+  const imageInputs = document.querySelectorAll(
+    'input[type="file"][accept*="image"]'
+  );
+  
+  imageInputs.forEach(input => {
+    // When the user picks a file, update the <img> preview
+    input.addEventListener('change', function() {
+      const previewId = this.dataset.previewTarget; // ID of the <img> tag
+      const previewElement = document.getElementById(previewId);
+      
+      // Only proceed if we have an element and a file selected
+      if (previewElement && this.files && this.files[0]) {
+        const reader = new FileReader();
+
+        // Once the file is read, set the image src and show it
+        reader.onload = function(e) {
+          previewElement.src = e.target.result;
+          previewElement.style.display = 'block';
+        };
+
+        // Read the selected file as a Data URL (base64)
+        reader.readAsDataURL(this.files[0]);
+      }
+    });
+  });
+}

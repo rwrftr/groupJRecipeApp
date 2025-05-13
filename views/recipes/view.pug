@@ -36,6 +36,52 @@ block content
               //- Numeric average + total number of ratings
               span.ms-1= (recipe.avg_rating || 0).toFixed(1)
               span.text-muted.ms-1 (#{recipe.rating_count || 0} ratings)
+            //- Prep / cook times & servings
+            span.text-muted.me-3
+              i.fas.fa-clock.me-1
+              | Prep: #{recipe.prep_time} min
+            span.text-muted.me-3
+              i.fas.fa-clock.me-1
+              | Cook: #{recipe.cook_time} min
+            span.text-muted
+              i.fas.fa-utensils.me-1
+              | Serves: #{recipe.servings}
+
+          //- ----- Category badge & author / timestamp -----
+          .mt-3
+            span.badge.bg-primary.me-2= recipe.category
+            span.text-muted Posted by 
+              a(href="#") #{recipe.username}
+              |  on #{new Date(recipe.created_at).toLocaleDateString()}
+
+          //- ----- Social-sharing buttons (FB / X / Pinterest / email) -----
+          .mt-3
+            .d-flex.align-items-center
+              span.me-2 Share:
+              //- Facebook
+              a.btn.btn-sm.btn-outline-primary.rounded-circle.me-1(
+                href=`https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(currentUrl)}`,
+                target="_blank",
+                title="Share on Facebook")
+                i.fab.fa-facebook-f
+              //- Twitter / X
+              a.btn.btn-sm.btn-outline-info.rounded-circle.me-1(
+                href=`https://twitter.com/intent/tweet?url=${encodeURIComponent(currentUrl)}&text=${encodeURIComponent(recipe.title)}`,
+                target="_blank",
+                title="Share on Twitter")
+                i.fab.fa-twitter
+              //- Pinterest (uses recipe image)
+              a.btn.btn-sm.btn-outline-danger.rounded-circle.me-1(
+                href=`https://pinterest.com/pin/create/button/?url=${encodeURIComponent(currentUrl)}&media=${encodeURIComponent(`${baseUrl}/${recipe.image}`)}&description=${encodeURIComponent(recipe.title)}`,
+                target="_blank",
+                title="Share on Pinterest")
+                i.fab.fa-pinterest-p
+              //- Email
+              a.btn.btn-sm.btn-outline-success.rounded-circle.me-1(
+                href=`mailto:?subject=${encodeURIComponent(`Recipe: ${recipe.title}`)}&body=${encodeURIComponent(`Check out this recipe: ${currentUrl}`)}`,
+                title="Share via Email")
+                i.fas.fa-envelope
+        
    
     else
       .alert.alert-warning

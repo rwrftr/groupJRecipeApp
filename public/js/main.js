@@ -114,3 +114,48 @@ function initializeImagePreview() {
 // -------------------------
 // Star Rating System
 // -------------------------
+function initializeRatingSystem() {
+  // Each .rating-input container holds a series of .rating-star elements
+  const ratingInputs = document.querySelectorAll('.rating-input');
+  
+  ratingInputs.forEach(input => {
+    const stars = input.querySelectorAll('.rating-star');
+    const ratingValue = input.querySelector('input[name="rating"]');
+    
+    stars.forEach((star, index) => {
+      // When a star is clicked, update the hidden input value
+      star.addEventListener('click', () => {
+        const value = parseInt(star.dataset.value, 10);
+        ratingValue.value = value;
+        
+        // Visually fill in stars up to the clicked one
+        stars.forEach((s, i) => {
+          if (i < value) {
+            s.classList.remove('far'); // empty star
+            s.classList.add('fas');    // solid star
+          } else {
+            s.classList.remove('fas');
+            s.classList.add('far');
+          }
+        });
+      });
+      
+      // Hover effect: highlight stars on mouseover
+      star.addEventListener('mouseenter', () => {
+        const value = parseInt(star.dataset.value, 10);
+        stars.forEach((s, i) => {
+          if (i < value) {
+            s.classList.add('hover');
+          } else {
+            s.classList.remove('hover');
+          }
+        });
+      });
+    });
+
+    // Remove hover highlighting when the mouse leaves the container
+    input.addEventListener('mouseleave', () => {
+      stars.forEach(s => s.classList.remove('hover'));
+    });
+  });
+}

@@ -39,3 +39,44 @@ document.addEventListener('DOMContentLoaded', function() {
 // -------------------------
 // Bootstrap Components Setup
 // -------------------------
+function initializeBootstrapComponents() {
+  // Tooltips: little hover hints defined by data-bs-toggle="tooltip"
+  const tooltipTriggerList = Array.from(
+    document.querySelectorAll('[data-bs-toggle="tooltip"]')
+  );
+  tooltipTriggerList.forEach(el => new bootstrap.Tooltip(el));
+  
+  // Popovers: small overlay panels defined by data-bs-toggle="popover"
+  const popoverTriggerList = Array.from(
+    document.querySelectorAll('[data-bs-toggle="popover"]')
+  );
+  popoverTriggerList.forEach(el => new bootstrap.Popover(el));
+}
+
+
+// -------------------------
+// Form Validation
+// -------------------------
+function initializeFormValidation() {
+  // Grab every form that has the .needs-validation class
+  const forms = document.querySelectorAll('.needs-validation');
+  
+  // For each form, prevent submission if HTML5 validation fails
+  Array.prototype.slice.call(forms).forEach(function(form) {
+    form.addEventListener('submit', function(event) {
+      // If the form fields aren’t valid, stop the submit
+      if (!form.checkValidity()) {
+        event.preventDefault();   // Don’t do the default submit
+        event.stopPropagation();  // Don’t bubble this event further
+      }
+
+      // Add Bootstrap’s validation styling class so invalid fields show up
+      form.classList.add('was-validated');
+    }, false);
+  });
+}
+
+
+// -------------------------
+// Image Preview
+// -------------------------

@@ -116,6 +116,61 @@ block content
               h4.card-title.mb-3 Description
               p.card-text= recipe.description     
    
+      //- ===========================  INGREDIENTS & INSTRUCTIONS  ===========================
+      .row
+        //- ---- Ingredients list ----
+        .col-md-4.mb-4
+          .card.shadow-sm.h-100
+            .card-header.bg-primary.text-white
+              h4.card-title.mb-0 Ingredients
+            .card-body
+              ul.ingredients-list.list-unstyled
+                //- Split by newline so authors can enter one ingredient per line
+                each ingredient in recipe.ingredients.split('\n')
+                  if ingredient.trim()
+                    li
+                      i.fas.fa-check-circle.text-primary.me-2
+                      | #{ingredient.trim()}
+        
+        //- ---- Step-by-step instructions ----
+        .col-md-8.mb-4
+          .card.shadow-sm.h-100
+            .card-header.bg-primary.text-white
+              h4.card-title.mb-0 Instructions
+            .card-body
+              ol.instructions-list
+                each instruction in recipe.instructions.split('\n')
+                  if instruction.trim()
+                    li #{instruction.trim()}
+      
+      //- ===========================  VISITOR RATING FORM  ===========================
+      if user && recipe.user_id !== user.id
+        .row.mt-4
+          .col-md-6.offset-md-3
+            .card.shadow-sm
+              .card-header.bg-primary.text-white
+                h5.card-title.mb-0 Rate this Recipe
+              .card-body
+                form.text-center(action=`/recipes/${recipe.id}/rate`, method="POST")
+                  .rating-input.mb-3
+                    each val in [1, 2, 3, 4, 5]
+                      i.far.fa-star.fa-2x.rating-star.me-1(data-value=val)
+                    //- Hidden field is updated by JS when a star is clicked
+                    input(type="hidden", name="rating", value="0")
+                  button.btn.btn-primary(type="submit") Submit Rating
+      
+      //- ===========================  AUTHOR CARD  ===========================
+      .row.mt-4
+        .col-md-4.offset-md-4.text-center
+          .card.shadow-sm
+            .card-body
+              img.rounded-circle.mb-2(
+                src=`/${recipe.profile_image}`,
+                alt=recipe.username,
+                width="80",
+                height="80")
+              h5= recipe.username
+
     else
       .alert.alert-warning
         h2.text-center Recipe not found

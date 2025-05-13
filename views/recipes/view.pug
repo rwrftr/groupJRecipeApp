@@ -181,7 +181,7 @@ block content
               h5.card-title.mb-0 
                 i.fas.fa-comments.me-2
                 | Comments (#{comments ? comments.length : 0})
-            
+
             //- --- Leave a comment (only when logged in) ---
             if user
               .card-body.border-bottom
@@ -197,10 +197,30 @@ block content
 
             //- --- List existing comments ---
             if comments && comments.length > 0
-              //- comments ui
-            else
-              .card-body.text-center.py-4
-                p.text-muted No comments yet. Be the first to comment!
+              ul.list-group.list-group-flush
+                each comment in comments
+                  li.list-group-item
+                    .d-flex
+                      img.rounded-circle.me-3(
+                        src=`/${comment.profile_image}`,
+                        width="40",
+                        height="40",
+                        alt=comment.username)
+                      .flex-grow-1
+                        .d-flex.justify-content-between.align-items-start
+                          div
+                            h6.mb-0= comment.username
+                            small.text-muted= new Date(comment.created_at).toLocaleString()
+                          //- Show delete icon if current user is comment author OR recipe owner
+                          if user && (user.id === comment.user_id || user.id === recipe.user_id)
+                            form(action=`/recipes/comment/${comment.id}/delete`, method="POST")
+                              input(type="hidden" name="recipe_id", value=recipe.id)
+                              button.btn.btn-sm.text-danger(type="submit" title="Delete comment")
+                                i.fas.fa-times
+                        p.mt-2.mb-0= comment.content            
+              else
+                .card-body.text-center.py-4
+                  p.text-muted No comments yet. Be the first to comment!
     else
       .alert.alert-warning
         h2.text-center Recipe not found

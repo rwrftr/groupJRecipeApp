@@ -1,0 +1,44 @@
+//- Extends the base layout file
+extends ../layout
+
+//- Main content block
+block content
+  .container.py-5 //- Adds vertical padding to the container
+    .row.justify-content-center //- Centers the row content
+      .col-md-6 //- Sets the column width to 6/12 (half) on medium screens
+        .card.shadow-sm //- Bootstrap card with a subtle shadow
+          .card-header.bg-primary.text-white //- Card header with blue background and white text
+            h4.card-title.mb-0 Login //- Title inside the card header
+
+          .card-body //- Card body contains the form
+            if errors && errors.general
+              .alert.alert-danger= errors.general //- Displays a general error message, if any
+
+            form(action="/users/login", method="POST") //- Login form sending a POST request
+              .mb-3 //- Margin bottom for spacing
+                label.form-label(for="email") Email Address //- Label for the email field
+                input.form-control#email(
+                  type="email"
+                  name="email"
+                  value=formData && formData.email || '' //- Pre-fills the email if formData exists
+                  required
+                )
+                if errors && errors.email
+                  small.text-danger= errors.email //- Shows email-specific error if present
+              
+              .mb-3
+                label.form-label(for="password") Password //- Label for the password field
+                input.form-control#password(
+                  type="password"
+                  name="password"
+                  required
+                )
+                if errors && errors.password
+                  small.text-danger= errors.password //- Shows password-specific error if present
+              
+              .d-grid.gap-2
+                button.btn.btn-primary(type="submit") Login //- Submit button with full width and spacing
+            
+            .mt-4.text-center
+              p Don't have an account? 
+                a(href="/users/register") Register //- Link to the registration page

@@ -39,3 +39,16 @@ document.addEventListener('DOMContentLoaded', function() {
 // -------------------------
 // Bootstrap Components Setup
 // -------------------------
+function initializeBootstrapComponents() {
+  // Tooltips: little hover hints defined by data-bs-toggle="tooltip"
+  const tooltipTriggerList = Array.from(
+    document.querySelectorAll('[data-bs-toggle="tooltip"]')
+  );
+  tooltipTriggerList.forEach(el => new bootstrap.Tooltip(el));
+  
+  // Popovers: small overlay panels defined by data-bs-toggle="popover"
+  const popoverTriggerList = Array.from(
+    document.querySelectorAll('[data-bs-toggle="popover"]')
+  );
+  popoverTriggerList.forEach(el => new bootstrap.Popover(el));
+}

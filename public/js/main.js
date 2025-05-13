@@ -108,3 +108,9 @@ function initializeImagePreview() {
     });
   });
 }
+
+
+
+// -------------------------
+// Star Rating System
+// -------------------------

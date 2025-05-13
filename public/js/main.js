@@ -35,3 +35,7 @@ document.addEventListener('DOMContentLoaded', function() {
   }, 5000);
 });
 
+
+// -------------------------
+// Bootstrap Components Setup
+// -------------------------

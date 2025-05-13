@@ -81,7 +81,7 @@ block content
                 href=`mailto:?subject=${encodeURIComponent(`Recipe: ${recipe.title}`)}&body=${encodeURIComponent(`Check out this recipe: ${currentUrl}`)}`,
                 title="Share via Email")
                 i.fas.fa-envelope
-        
+
         //- ----- Print / Edit / Delete controls (owner-only for edit & delete) -----
         .col-md-4.text-md-end
           .btn-group
@@ -99,8 +99,8 @@ block content
                 button.btn.btn-outline-danger(type="submit")
                   i.fas.fa-trash.me-1
                   | Delete
-      
-         
+
+
       //- ===========================  MAIN  IMAGE + DESCRIPTION  ===========================
       .row
         //- Recipe image (fallback to generic placeholder)
@@ -108,14 +108,14 @@ block content
           img.img-fluid.rounded.recipe-detail-img(
             src=recipe.image ? `/${recipe.image}` : "/images/default/default-recipe.jpg",
             alt=recipe.title)
-        
+
         //- Short textual description card
         .col-md-6.mb-4
           .card.shadow-sm.h-100
             .card-body
               h4.card-title.mb-3 Description
               p.card-text= recipe.description     
-   
+
       //- ===========================  INGREDIENTS & INSTRUCTIONS  ===========================
       .row
         //- ---- Ingredients list ----
@@ -131,7 +131,7 @@ block content
                     li
                       i.fas.fa-check-circle.text-primary.me-2
                       | #{ingredient.trim()}
-        
+
         //- ---- Step-by-step instructions ----
         .col-md-8.mb-4
           .card.shadow-sm.h-100
@@ -142,7 +142,7 @@ block content
                 each instruction in recipe.instructions.split('\n')
                   if instruction.trim()
                     li #{instruction.trim()}
-      
+
       //- ===========================  VISITOR RATING FORM  ===========================
       if user && recipe.user_id !== user.id
         .row.mt-4
@@ -156,9 +156,9 @@ block content
                     each val in [1, 2, 3, 4, 5]
                       i.far.fa-star.fa-2x.rating-star.me-1(data-value=val)
                     //- Hidden field is updated by JS when a star is clicked
-                    input(type="hidden", name="rating", value="0")
+                    input(type="hidden" name="rating" value="0")
                   button.btn.btn-primary(type="submit") Submit Rating
-      
+
       //- ===========================  AUTHOR CARD  ===========================
       .row.mt-4
         .col-md-4.offset-md-4.text-center
@@ -170,6 +170,17 @@ block content
                 width="80",
                 height="80")
               h5= recipe.username
+              p.text-muted Recipe Author
+              a.btn.btn-sm.btn-outline-primary(href="#") View All Recipes
+
+      //- ===========================  COMMENTS  ===========================
+      .row.mt-4
+        .col-md-8.offset-md-2
+          .card.shadow-sm
+            .card-header.bg-primary.text-white
+              h5.card-title.mb-0 
+                i.fas.fa-comments.me-2
+                | Comments (#{comments ? comments.length : 0})
 
     else
       .alert.alert-warning

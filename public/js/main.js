@@ -52,3 +52,8 @@ function initializeBootstrapComponents() {
   );
   popoverTriggerList.forEach(el => new bootstrap.Popover(el));
 }
+
+
+// -------------------------
+// Form Validation
+// -------------------------

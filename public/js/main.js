@@ -75,3 +75,8 @@ function initializeFormValidation() {
     }, false);
   });
 }
+
+
+// -------------------------
+// Image Preview
+// -------------------------

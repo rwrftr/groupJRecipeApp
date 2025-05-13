@@ -1,12 +1,42 @@
 extends ../layout
 
+//- -----------------------------------------------------------------------------
+//-  View: Show a single recipe with rating, image, ingredients, instructions,
+//-        author info, comments, and social-sharing controls.
+//-
+//-  Template variables provided by the controller:
+//-    • recipe       – recipe object (may be null if not found)
+//-    • user         – logged-in user object (or null)
+//-    • comments     – array of comment objects (may be empty)
+//-    • currentUrl   – absolute URL for current page (used in share links)
+//-    • baseUrl      – base URL of the site (used for Pinterest image link)
+//-
+//-  Client-side helper expected globally:
+//-    • initializeRatingSystem() – JS that wires up the interactive star input
+//- -----------------------------------------------------------------------------
+
 block content
   .container.py-5
+    //- If we have a recipe, render it otherwise show a missing recipe notice
     if recipe
-      // Recipe Header
+      //- Recipe Header
       .row.mb-4
         .col-md-8
+          //- Title and rating summary
           h1.mb-3= recipe.title
+          .d-flex.align-items-center
+            .rating.me-3
+              - const rating = Math.round(recipe.avg_rating || 0)   // rounded avg
+              //- Render 5 stars: solid ≤ rating, outline otherwise
+              each val in [1, 2, 3, 4, 5]
+                if val <= rating
+                  i.fas.fa-star.text-warning
+                else
+                  i.far.fa-star.text-warning
+              //- Numeric average + total number of ratings
+              span.ms-1= (recipe.avg_rating || 0).toFixed(1)
+              span.text-muted.ms-1 (#{recipe.rating_count || 0} ratings)
+   
     else
       .alert.alert-warning
         h2.text-center Recipe not found

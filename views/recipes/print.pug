@@ -1,0 +1,70 @@
+doctype html
+html(lang="en")
+  head
+    meta(charset="UTF-8")
+    meta(name="viewport", content="width=device-width, initial-scale=1.0")
+    title #{recipe.title} - Recipe Print View
+
+    //- basic Bootstrap for layout
+    link(href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet")
+
+    //- custom styles for print view
+    link(rel="stylesheet", href="/css/print.css")
+
+    //- screen-specific styles (print button, centered layout, etc.)
+    style.
+      @media screen {
+        body { padding: 2rem; max-width: 1200px; margin: 0 auto; }
+        .print-button { position: fixed; top: 20px; right: 20px; z-index: 1000; }
+      }
+  
+  body
+    //- print trigger button, only for screen
+    button.btn.btn-primary.print-button(onclick="window.print()") Print Recipe
+    
+    main
+      .container
+        //- recipe title and basic meta info
+        .recipe-header
+          h1= recipe.title
+          .recipe-meta
+            span Prep: #{recipe.prep_time} min | 
+            span Cook: #{recipe.cook_time} min | 
+            span Servings: #{recipe.servings} | 
+            span Category: #{recipe.category}
+        
+        //- main recipe content (image, description, etc.)
+        .recipe-content
+          if recipe.image
+            img.recipe-image(src=`/${recipe.image}`, alt=recipe.title)
+          
+          .recipe-description
+            p= recipe.description
+          
+          //- list of ingredients (split by line)
+          .recipe-ingredients
+            h2 Ingredients
+            ul.ingredients-list
+              each ingredient in recipe.ingredients.split('\n')
+                if ingredient.trim()
+                  li= ingredient.trim()
+          
+          //- step-by-step instructions (split by line)
+          .recipe-instructions
+            h2 Instructions
+            ol.instructions-list
+              each instruction in recipe.instructions.split('\n')
+                if instruction.trim()
+                  li= instruction.trim()
+        
+        //- print footer with attribution
+        .recipe-footer
+          p Recipe from RecipeShare | Shared by #{recipe.username} | Printed on #{new Date().toLocaleDateString()}
+    
+    //- auto-trigger print if ?autoprint=true is in URL
+    script.
+      window.onload = function() {
+        if (window.location.search.includes('autoprint=true')) {
+          window.print();
+        }
+      };

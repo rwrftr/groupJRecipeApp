@@ -116,3 +116,42 @@ router.get('/:id', async (req, res) => {
     res.redirect('/');
   }
 });
+
+// -----------------------------------------------------------------------------
+// EDIT RECIPE – show pre-filled form
+// -----------------------------------------------------------------------------
+router.get('/:id/edit', isAuthenticated, async (req, res) => {
+  try {
+    const recipe = await Recipe.findById(req.params.id);
+    if (!recipe) {
+      req.session.error = 'Recipe not found';
+      return res.redirect('/');
+    }
+
+    // Only the owner can edit
+    if (recipe.user_id !== req.session.user.id) {
+      req.session.error = 'You can only edit your own recipes';
+      return res.redirect(`/recipes/${req.params.id}`);
+    }
+
+    const formData = req.session.formData || recipe;
+    const errors   = req.session.errors   || {};
+
+    delete req.session.formData;
+    delete req.session.errors;
+
+    const categories = await Recipe.getCategories();
+
+    res.render('recipes/edit', {
+      title: `Edit: ${recipe.title}`,
+      recipe,
+      formData,
+      errors,
+      categories
+    });
+  } catch (err) {
+    console.error('Error loading edit form:', err);
+    req.session.error = 'Failed to load edit recipe form';
+    res.redirect('/');
+  }
+});

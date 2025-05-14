@@ -1,0 +1,19 @@
+//- search-results.pug
+//- -------------------------------------------------------------
+//- Template for displaying search results on RecipeShare.
+//- It shows what the user searched for, how many matches were found,
+//- provides a quick search form to try again, and then either:
+//-   • A grid of recipe cards for each match, or
+//-   • A friendly “no results” message with a button to browse all.
+//-
+//- Available variables:
+//-   • searchTerm  – The text the user entered in the search box.
+//-   • count       – Number of recipes that matched that term.
+//-   • recipes     – Array of recipe objects (could be empty).
+//-     Each recipe has: image, title, description, avg_rating, category, username, id.
+//- -------------------------------------------------------------
+extends layout
+
+block content
+  //- Wrap everything in a padded container for nice spacing
+  .container.py-5

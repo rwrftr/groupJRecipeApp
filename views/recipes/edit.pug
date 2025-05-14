@@ -14,4 +14,40 @@ block content
         .card.shadow-sm
           .card-header.bg-primary.text-white
             h4.card-title.mb-0 Edit Recipe
-          
+
+          //- ===== MAIN FORM =====
+          .card-body
+            //- enctype needs to be multipart for image uploads
+            form(
+              action=`/recipes/${recipe.id}/edit`,
+              method="POST",
+              enctype="multipart/form-data",
+              class="needs-validation",
+              novalidate)
+
+              //- ── Title & Category ───────────────────────────────
+              .row
+                .col-md-6.mb-3
+                  label.form-label(for="title") Recipe Title *
+                  input.form-control#title(
+                    type="text",
+                    name="title",
+                    value=formData && formData.title || '',
+                    required)
+                  if errors && errors.title
+                    small.text-danger= errors.title
+                .col-md-6.mb-3
+                  label.form-label(for="category") Category *
+                  select.form-select#category(
+                    name="category",
+                    required)
+                    option(value="", selected=!formData || !formData.category) Select a category
+                    each category in [
+                      'Appetizers','Main Dishes','Desserts','Breakfast','Lunch',
+                      'Dinner','Snacks','Soups','Salads','Beverages','Baked Goods',
+                      'Vegan','Vegetarian','Gluten-Free','Low-Carb']
+                      option(
+                        value=category,
+                        selected=formData && formData.category === category)= category
+                  if errors && errors.category
+                    small.text-danger= errors.category

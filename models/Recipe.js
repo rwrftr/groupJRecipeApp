@@ -62,6 +62,27 @@ class Recipe {
         queryParams.push(options.category);
       }
 
+      // --- Text search (title OR ingredients) -------------------------------
+      if (options.search) {
+        const clause = options.category ? ' AND' : ' WHERE';
+        query += `${clause} (r.title LIKE ? OR r.ingredients LIKE ?)`;
+        queryParams.push(`%${options.search}%`, `%${options.search}%`);
+      }
+
+      // --- Sorting (allowlist to prevent SQL injection) ----------------------
+      const validSort = ['created_at', 'avg_rating', 'title'];
+      const sortField = validSort.includes(options.sortBy) ? options.sortBy : 'created_at';
+      const sortDir   = options.sortOrder === 'asc' ? 'ASC' : 'DESC';
+      query += ` ORDER BY ${sortField} ${sortDir}`;
+
+      // --- Pagination --------------------------------------------------------
+      if (options.limit) {
+        const limit  = parseInt(options.limit, 10)  || 10;
+        const offset = parseInt(options.offset, 10) || 0;
+        query += ' LIMIT ? OFFSET ?';
+        queryParams.push(limit, offset);
+      }
+
       const rows = await all(query, queryParams);
       return rows;
     } catch (error) {

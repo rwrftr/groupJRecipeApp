@@ -123,3 +123,79 @@ html(lang="en")
                 a.nav-link(href="/users/login") Login
               li.nav-item
                 a.nav-link(href="/users/register") Register
+
+                 //- ----------------------------------------------------------------
+    //- Flash Message Alerts
+    //- ----------------------------------------------------------------
+    //- When the server sets a success or error message, display it at the top.
+    if success
+      .container.mt-3
+        .alert.alert-success.alert-dismissible.fade.show
+          | #{success}
+          //- A small button to manually close the alert.
+          button.btn-close(type="button", data-bs-dismiss="alert")
+    if error
+      .container.mt-3
+        .alert.alert-danger.alert-dismissible.fade.show
+          | #{error}
+          button.btn-close(type="button", data-bs-dismiss="alert")
+
+    //- ----------------------------------------------------------------
+    //- Main Content Area
+    //- ----------------------------------------------------------------
+    //- This is where each page’s unique content gets injected.
+    //- Example: the recipe list, recipe detail, login form, etc.
+    main.py-4
+      block content
+
+    //- ----------------------------------------------------------------
+    //- Footer
+    //- ----------------------------------------------------------------
+    //- A dark footer that stays at the bottom of the page.
+    footer.bg-dark.text-light.py-4.mt-auto
+      .container
+        .row
+          //- About section
+          .col-md-4.mb-3
+            h5 RecipeShare
+            p Share your culinary creations with the world
+          //- Quick navigation links
+          .col-md-4.mb-3
+            h5 Quick Links
+            ul.list-unstyled
+              li
+                a.text-light(href="/") Home
+              li
+                a.text-light(href="/explore") Explore Recipes
+              li
+                a.text-light(href="/about") About Us
+          //- Social media connections
+          .col-md-4.mb-3
+            h5 Connect With Us
+            ul.list-unstyled.social-icons
+              li
+                a.text-light(href="#")
+                  i.fab.fa-facebook.me-2
+                  | Facebook
+              li
+                a.text-light(href="#")
+                  i.fab.fa-instagram.me-2
+                  | Instagram
+              li
+                a.text-light(href="#")
+                  i.fab.fa-twitter.me-2
+                  | Twitter
+        .row.mt-3
+          .col
+            p.text-center CSC317 Assignment 5 | Recipe Sharing Platform &copy; 2023
+
+    //- ----------------------------------------------------------------
+    //- JavaScript Includes
+    //- ----------------------------------------------------------------
+    //- Bundle bootstrap JS (includes Popper for dropdowns/modals).
+    script(src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js")
+    //- Our own main.js for form checks, image previews, rating stars, etc.
+    script(src="/js/main.js")
+
+    //- This block lets individual pages add extra scripts if needed.
+    block scripts

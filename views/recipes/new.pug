@@ -154,3 +154,11 @@ block content
                 button.btn.btn-primary(type="submit")
                   i.fas.fa-save.me-1
                   | Save Recipe
+
+block scripts
+  //- Client-side helper: live image preview on file select
+  script.
+    document.addEventListener('DOMContentLoaded', function() {
+      // Initialize image preview
+      initializeImagePreview();
+    });

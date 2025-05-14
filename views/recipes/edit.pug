@@ -51,3 +51,79 @@ block content
                         selected=formData && formData.category === category)= category
                   if errors && errors.category
                     small.text-danger= errors.category
+
+              //- ── Show the current photo, if there is one ──────
+              if recipe.image
+                .mb-3
+                  label.form-label Current Image
+                  .d-block
+                    img.img-fluid.rounded(
+                      src=`/${recipe.image}`,
+                      alt=recipe.title,
+                      style="max-height: 200px;")
+              
+              //- ── Upload a new photo  ──────────────────────────
+              .mb-3
+                label.form-label(for="image") Change Recipe Image
+                input.form-control#image(
+                  type="file",
+                  name="image",
+                  accept="image/*",
+                  data-preview-target="image-preview")
+                if errors && errors.image
+                  small.text-danger= errors.image
+                else
+                  small.text-muted Optional – replace the old photo (≤ 5 MB)
+                .mt-2
+                  img#image-preview.img-fluid.rounded(
+                    src="",
+                    alt="Recipe preview",
+                    style="max-height: 200px; display: none;")
+              
+              //- ── Ingredients textarea ────────────────────────
+              .mb-3
+                label.form-label(for="ingredients") Ingredients *
+                textarea.form-control#ingredients(
+                  name="ingredients",
+                  rows="6",
+                  required,
+                  placeholder="One ingredient per line")= formData && formData.ingredients || ''
+                if errors && errors.ingredients
+                  small.text-danger= errors.ingredients
+                else
+                  small.text-muted List each ingredient on its own line
+              
+              //- ── Instructions textarea ───────────────────────
+              .mb-3
+                label.form-label(for="instructions") Instructions *
+                textarea.form-control#instructions(
+                  name="instructions",
+                  rows="8",
+                  required,
+                  placeholder="One step per line")= formData && formData.instructions || ''
+                if errors && errors.instructions
+                  small.text-danger= errors.instructions
+                else
+                  small.text-muted Step-by-step directions; new line = new step
+              
+              //- ── Action buttons (cancel / delete / save) ─────
+              .d-flex.justify-content-between.mt-4
+                .btn-group
+                  a.btn.btn-outline-secondary(href=`/recipes/${recipe.id}`) Cancel
+                  form.d-inline(
+                    action=`/recipes/${recipe.id}/delete`,
+                    method="POST",
+                    onsubmit="return confirm('Are you sure? This can’t be undone.')")
+                    button.btn.btn-outline-danger(type="submit")
+                      i.fas.fa-trash.me-1
+                      | Delete
+                button.btn.btn-primary(type="submit")
+                  i.fas.fa-save.me-1
+                  | Update Recipe
+
+//- ------ Tiny helper script for live-previewing the new image ------
+block scripts
+  script.
+    document.addEventListener('DOMContentLoaded', () => {
+      initializeImagePreview();   // defined globally in main bundle
+    });

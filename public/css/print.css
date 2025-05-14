@@ -18,3 +18,19 @@
      9. Footer styling for attribution and copyright  
    ================================================================================ */
    
+@media print {
+  /* ----------------------------------------------------------------------------  
+     1. Hiding non-printable elements  
+     Elements like navigation, buttons, forms, ratings, comments, and author info  
+     don’t make sense on paper, so we hide them completely.  
+     The !important flag makes sure they stay hidden.  
+     ---------------------------------------------------------------------------- */
+       nav,
+  footer,
+  .btn,
+  form,
+  .rating-section,
+  .comments-section,
+  .author-section {
+    display: none !important;
+  }

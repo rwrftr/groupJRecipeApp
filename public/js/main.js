@@ -159,3 +159,56 @@ function initializeRatingSystem() {
     });
   });
 }
+
+ // Remove hover highlighting when the mouse leaves the container
+    input.addEventListener('mouseleave', () => {
+      stars.forEach(s => s.classList.remove('hover'));
+    });
+  });
+}
+
+
+// -------------------------
+// Recipe Filtering & Sorting
+// -------------------------
+document.addEventListener('DOMContentLoaded', function() {
+  // Elements that let users filter recipes by category
+  const categoryFilters = document.querySelectorAll('.category-filter');
+  // Elements that let users sort recipes (e.g., newest, rating)
+  const sortOptions = document.querySelectorAll('.sort-option');
+  
+  // For each category link, update the URL query string
+  categoryFilters.forEach(filter => {
+    filter.addEventListener('click', function(e) {
+      e.preventDefault();  // Don’t navigate immediately
+
+      const category = this.dataset.category;
+      const url = new URL(window.location);
+
+      if (category) {
+        url.searchParams.set('category', category);
+      } else {
+        url.searchParams.delete('category');
+      }
+
+      // Reload the page with the new filter applied
+      window.location.href = url.toString();
+    });
+  });
+  
+  // For each sort link, update sort and order parameters in the URL
+  sortOptions.forEach(option => {
+    option.addEventListener('click', function(e) {
+      e.preventDefault();
+
+      const sort = this.dataset.sort;
+      const order = this.dataset.order;
+      const url = new URL(window.location);
+
+      url.searchParams.set('sort', sort);
+      url.searchParams.set('order', order);
+
+      window.location.href = url.toString();
+    });
+  });
+});

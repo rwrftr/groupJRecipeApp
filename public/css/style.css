@@ -7,4 +7,29 @@
    3. Ensures the page always fills at least the full viewport height so the footer
       stays at the bottom, even on short pages.
    ================================================================================ */
-   
+   body {
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
+
+/* ----------------------------------------------------------------------------
+   Make <main> grow to fill available space between header and footer,
+   so the footer stays pinned to the bottom if content is short.
+   ---------------------------------------------------------------------------- */
+main {
+  flex: 1;
+}
+
+/* ================================================================================
+   Utility Helper Classes
+   --------------------------------------------------------------------------------
+   These small helper rules can be mixed into any element to tweak its behavior:
+   - .object-cover: Scale an image or video to completely fill its container
+     without stretching, cropping the excess.
+   ================================================================================ */
+   .object-cover {
+  object-fit: cover;
+}

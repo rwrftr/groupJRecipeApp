@@ -91,4 +91,40 @@ class Recipe {
     }
   }
 
+    // ---------------------------------------------------------------------------
+  // Insert a new recipe. Returns the new row’s ID.
+  // image param is optional; a default placeholder is used if not provided.
+  // ---------------------------------------------------------------------------
+  static async create(recipeData) {
+    const {
+      title, description, ingredients, instructions,
+      prep_time, cook_time, servings, category, image, user_id
+    } = recipeData;
+
+    try {
+      const result = await run(`
+        INSERT INTO recipes
+          (title, description, ingredients, instructions,
+           prep_time, cook_time, servings, category, image, user_id)
+        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+      `, [
+        title,
+        description,
+        ingredients,
+        instructions,
+        prep_time,
+        cook_time,
+        servings,
+        category,
+        image || 'images/default/default-recipe.jpg',
+        user_id
+      ]);
+
+      return result.lastID; // handy for redirecting straight to /recipes/:id
+    } catch (error) {
+      console.error('Error creating recipe:', error);
+      throw error;
+    }
+  }
+
 }

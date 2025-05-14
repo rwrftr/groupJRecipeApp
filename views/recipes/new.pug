@@ -134,3 +134,23 @@ block content
                   small.text-danger= errors.ingredients
                 else
                   small.text-muted List each ingredient on a new line
+
+              //- ----------  INSTRUCTIONS  ----------
+              .mb-3
+                label.form-label(for="instructions") Instructions *
+                textarea.form-control#instructions(
+                  name="instructions",
+                  rows="8",
+                  required,
+                  placeholder="Enter each step on a new line")= formData && formData.instructions || ''
+                if errors && errors.instructions
+                  small.text-danger= errors.instructions
+                else
+                  small.text-muted List each step on a new line
+              
+              //- ----------  FORM ACTION BUTTONS  ----------
+              .d-flex.justify-content-between.mt-4
+                a.btn.btn-outline-secondary(href="javascript:history.back()") Cancel
+                button.btn.btn-primary(type="submit")
+                  i.fas.fa-save.me-1
+                  | Save Recipe

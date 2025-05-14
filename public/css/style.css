@@ -51,3 +51,15 @@ main {
    Add roomy vertical padding above and below the hero banner:
    - 4rem top and bottom ensures the intro area feels open on large screens.
    ================================================================================ */
+.hero-section {
+  padding: 4rem 0;
+}
+
+/* ================================================================================
+   Recipe Cards Interaction
+   --------------------------------------------------------------------------------
+   These rules bring the recipe preview cards to life:
+   1. Smoothly animate position and shadow on hover for a “lift” effect.
+   2. Hide overflow so images don’t spill beyond the card.
+   3. Constrain the top image height and crop it neatly.
+   ================================================================================ */

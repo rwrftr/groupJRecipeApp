@@ -1,0 +1,20 @@
+/* ================================================================================  
+   Printable Recipe Page CSS  
+   
+   This print stylesheet prepares recipe pages for printing by:  
+     1. Cleaning up the layout for paper  
+     2. Hiding interactive elements that don’t work in print  
+     3. Ensuring the recipe content is clear and easy to read on paper  
+   
+   Sections:  
+     1. Hiding non-printable elements  
+     2. Setting page margins for print  
+     3. Base typography and colors for print  
+     4. Container sizing for full-width printing  
+     5. Header styling to highlight recipe title and metadata  
+     6. Main content styling: images, description, ingredients, and instructions  
+     7. Controlling page breaks to keep related content together  
+     8. Displaying URLs for links in print  
+     9. Footer styling for attribution and copyright  
+   ================================================================================ */
+   

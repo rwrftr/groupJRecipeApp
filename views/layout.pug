@@ -43,3 +43,83 @@ html(lang="en")
     )
     //- Our custom CSS file where we override Bootstrap and add site styles.
     link(rel="stylesheet", href="/css/style.css")
+
+     body
+    //- ----------------------------------------------------------------
+    //- Navigation Bar
+    //- ----------------------------------------------------------------
+    //- A responsive navbar that collapses on mobile screens.
+    nav.navbar.navbar-expand-lg.navbar-dark.bg-primary
+      .container
+        //- Site logo and home link.
+        a.navbar-brand(href="/")
+          i.fas.fa-utensils.me-2
+          | RecipeShare
+
+        //- Button that toggles the collapsed menu on small viewports.
+        button.navbar-toggler(
+          type="button"
+          data-bs-toggle="collapse"
+          data-bs-target="#navbarNav"
+        )
+          span.navbar-toggler-icon
+
+        //- The collapsible menu area.
+        #navbarNav.collapse.navbar-collapse
+          ul.navbar-nav.me-auto
+            //- Always show Home and Explore links.
+            li.nav-item
+              a.nav-link(href="/") Home
+            li.nav-item
+              a.nav-link(href="/explore") Explore
+            //- Only show “Create Recipe” if someone is logged in.
+            if user
+              li.nav-item
+                a.nav-link(href="/recipes/new") Create Recipe
+
+          //- ----------------------------------------------------------------
+          //- Recipe Search Form
+          //- ----------------------------------------------------------------
+          //- A GET form that sends the query as “q” to /search.
+          form.d-flex.me-2(action="/search", method="GET")
+            input.form-control.me-2(
+              type="search"
+              name="q"
+              placeholder="Search recipes..."
+              required
+            )
+            button.btn.btn-light(type="submit")
+              i.fas.fa-search
+
+          //- ----------------------------------------------------------------
+          //- User Authentication Links
+          //- ----------------------------------------------------------------
+          ul.navbar-nav.ms-auto
+            //- If logged in, show avatar, username, and a dropdown menu.
+            if user
+              li.nav-item.dropdown
+                a.nav-link.dropdown-toggle(
+                  href="#"
+                  data-bs-toggle="dropdown"
+                )
+                  //- Display the user’s profile picture and name.
+                  img.rounded-circle.me-1(
+                    src=`/${user.profile_image}`
+                    width="24"
+                    height="24"
+                    alt=user.username
+                  )
+                  | #{user.username}
+                ul.dropdown-menu.dropdown-menu-end
+                  li
+                    a.dropdown-item(href="/users/profile") My Profile
+                  li
+                    a.dropdown-item(href="/users/edit-profile") Edit Profile
+                  li
+                    a.dropdown-item(href="/users/logout") Logout
+            //- If nobody’s logged in, show links to log in or register.
+            else
+              li.nav-item
+                a.nav-link(href="/users/login") Login
+              li.nav-item
+                a.nav-link(href="/users/register") Register

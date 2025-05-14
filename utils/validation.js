@@ -35,3 +35,64 @@ const userValidationRules = () => {
 module.exports = {
   userValidationRules
 };
+const { body } = require('express-validator');
+
+// recipe form validation
+const recipeValidationRules = () => {
+  return [
+    body('title')
+      .trim()
+      .notEmpty()
+      .withMessage('Title is required')
+      .isLength({ max: 100 })
+      .withMessage('Title must be less than 100 characters'),
+
+    body('description')
+      .trim()
+      .notEmpty()
+      .withMessage('Description is required')
+      .isLength({ max: 500 })
+      .withMessage('Description must be less than 500 characters'),
+
+    body('ingredients')
+      .trim()
+      .notEmpty()
+      .withMessage('Ingredients are required'),
+
+    body('instructions')
+      .trim()
+      .notEmpty()
+      .withMessage('Instructions are required'),
+
+    body('prep_time')
+      .isInt({ min: 1 })
+      .withMessage('Preparation time must be a positive number'),
+
+    body('cook_time')
+      .isInt({ min: 0 })
+      .withMessage('Cooking time must be a non-negative number'),
+
+    body('servings')
+      .isInt({ min: 1 })
+      .withMessage('Servings must be a positive number'),
+
+    body('category')
+      .trim()
+      .notEmpty()
+      .withMessage('Category is required')
+  ];
+};
+
+// rating form validation
+const ratingValidationRules = () => {
+  return [
+    body('rating')
+      .isInt({ min: 1, max: 5 })
+      .withMessage('Rating must be between 1 and 5')
+  ];
+};
+
+module.exports = {
+  recipeValidationRules,
+  ratingValidationRules
+};

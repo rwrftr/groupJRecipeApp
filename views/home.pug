@@ -7,3 +7,26 @@ block content
   //- This top banner welcomes visitors, explains what the site does,
   //- and offers buttons to explore recipes or, if you’re logged in,
   //- to share your own creations.
+  .hero-section.py-5.bg-light
+    .container
+      .row.align-items-center
+        .col-md-6
+          //- Big, friendly headline
+          h1.display-4 Share Your Culinary Creations
+          //- Short tagline explaining the site’s purpose
+          p.lead Discover, create, and share delicious recipes with food enthusiasts around the world.
+          .mt-4
+            //- Primary button always takes you to the Explore page
+            a.btn.btn-primary.me-2(href="/explore") Explore Recipes
+            //- If nobody is logged in, invite them to join…
+            if !user
+              a.btn.btn-outline-primary(href="/users/register") Join Now
+            //- …otherwise let them go straight to the recipe creation form
+            else
+              a.btn.btn-outline-primary(href="/recipes/new") Share a Recipe
+        .col-md-6
+          //- A mouth-watering hero image to set the mood
+          img.img-fluid.rounded.shadow(
+            src="/images/hero-image.jpg",
+            alt="Delicious Food"
+          )

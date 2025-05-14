@@ -1,0 +1,96 @@
+// Extends the base layout template
+extends ../layout
+
+// Defines the content block for the page
+block content
+  .container.py-5 // Bootstrap container with vertical padding
+
+    // Profile Header section
+    .profile-header.p-4
+      .row.align-items-center // Align items vertically
+        .col-md-3.text-center.text-md-start
+          // User's profile image
+          img.profile-image(src=`/${user.profile_image}`, alt=user.username)
+        .col-md-9
+          // Username as heading
+          h2.mb-3= user.username
+          // User email with icon
+          p.text-muted
+            i.fas.fa-envelope.me-2
+            | #{user.email}
+          // Account creation date with calendar icon
+          p.text-muted
+            i.fas.fa-calendar-alt.me-2
+            | Joined on #{new Date(user.created_at).toLocaleDateString()}
+          .mt-3
+            // Button to create a new recipe
+            a.btn.btn-primary.me-2(href="/recipes/new")
+              i.fas.fa-plus.me-1
+              | Create Recipe
+            // Button to edit profile
+            a.btn.btn-outline-primary(href="/users/edit-profile")
+              i.fas.fa-user-edit.me-1
+              | Edit Profile
+    
+    // Section for user's recipes
+    .mt-4
+      h3.mb-4
+        i.fas.fa-utensils.me-2
+        | My Recipes
+      
+      // Check if there are recipes
+      if recipes && recipes.length
+        .row
+          each recipe in recipes
+            .col-md-4.mb-4
+              .card.h-100.shadow-sm.recipe-card // Recipe card
+                // Recipe image or default image
+                if recipe.image
+                  img.card-img-top(src=`/${recipe.image}`, alt=recipe.title)
+                else
+                  img.card-img-top(src="/images/default/default-recipe.jpg", alt=recipe.title)
+                .card-body
+                  // Recipe title
+                  h5.card-title= recipe.title
+                  // Category and creation date
+                  .d-flex.justify-content-between.align-items-center.mb-2
+                    span.badge.bg-primary= recipe.category
+                    small.text-muted #{new Date(recipe.created_at).toLocaleDateString()}
+                  // Short description preview
+                  p.card-text.text-muted.small= recipe.description.substring(0, 80) + (recipe.description.length > 80 ? '...' : '')
+                  // Rating display with stars
+                  .d-flex.align-items-center.mt-2
+                    .rating.me-2
+                      - const rating = Math.round(recipe.avg_rating || 0)
+                      each val in [1, 2, 3, 4, 5]
+                        if val <= rating
+                          i.fas.fa-star.text-warning
+                        else
+                          i.far.fa-star.text-warning
+                    // Average rating and number of ratings
+                    span= (recipe.avg_rating || 0).toFixed(1)
+                    span.text-muted.ms-1 (#{recipe.rating_count || 0})
+                // Footer with view/edit/delete actions
+                .card-footer.bg-white.border-top-0
+                  .btn-group.w-100
+                    a.btn.btn-sm.btn-primary(href=`/recipes/${recipe.id}`)
+                      i.fas.fa-eye.me-1
+                      | View
+                    a.btn.btn-sm.btn-outline-primary(href=`/recipes/${recipe.id}/edit`)
+                      i.fas.fa-edit.me-1
+                      | Edit
+                    // Delete form with confirmation prompt
+                    form.d-inline(action=`/recipes/${recipe.id}/delete`, method="POST", onsubmit="return confirm('Are you sure you want to delete this recipe?')")
+                      button.btn.btn-sm.btn-outline-danger(type="submit")
+                        i.fas.fa-trash.me-1
+                        | Delete
+      else
+        // Message shown when no recipes exist
+        .card.shadow-sm
+          .card-body.text-center.py-5
+            i.fas.fa-utensils.fa-3x.text-muted.mb-3
+            h3 No recipes yet
+            p.text-muted You haven't shared any recipes yet.
+            a.btn.btn-primary.mt-3(href="/recipes/new")
+              i.fas.fa-plus.me-1
+              | Create Recipe

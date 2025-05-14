@@ -1,0 +1,86 @@
+// Extends a base layout template to maintain consistent design
+extends ../layout
+
+// Defines the 'content' block for this page
+block content
+  .container.py-5 // Bootstrap container with padding
+    .row.justify-content-center // Center the row content
+      .col-md-6 // Column that takes up half the width on medium+ screens
+        .card.shadow-sm // Card UI component with a small shadow
+          .card-header.bg-primary.text-white // Card header with primary color background and white text
+            h4.card-title.mb-0 Create an Account // Title inside the header
+          .card-body // Main content area of the card
+            // Start of the form, sending POST request to /users/register
+            form(action="/users/register", method="POST")
+              
+              // Username input field
+              .mb-3
+                label.form-label(for="username") Username // Label for username input
+                input.form-control#username(
+                  type="text"
+                  name="username"
+                  value=formData && formData.username || '' // Preserves input on form error
+                  required
+                )
+                // Show error if there's a username error
+                if errors && errors.username
+                  small.text-danger= errors.username
+                else
+                  small.text-muted Username can contain letters, numbers, and underscores // Hint text
+
+              // Email input field
+              .mb-3
+                label.form-label(for="email") Email Address
+                input.form-control#email(
+                  type="email"
+                  name="email"
+                  value=formData && formData.email || '' // Preserves input on error
+                  required
+                )
+                // Show email-specific error
+                if errors && errors.email
+                  small.text-danger= errors.email
+
+              // Password input field
+              .mb-3
+                label.form-label(for="password") Password
+                input.form-control#password(
+                  type="password"
+                  name="password"
+                  required
+                )
+                // Show password error or hint
+                if errors && errors.password
+                  small.text-danger= errors.password
+                else
+                  small.text-muted Password must be at least 6 characters and include a number
+
+              // Confirm password field
+              .mb-3
+                label.form-label(for="confirm_password") Confirm Password
+                input.form-control#confirm_password(
+                  type="password"
+                  name="confirm_password"
+                  required
+                )
+                // Show confirm password error
+                if errors && errors.confirm_password
+                  small.text-danger= errors.confirm_password
+
+              // Checkbox for agreeing to terms
+              .mb-3.form-check
+                input.form-check-input#terms(
+                  type="checkbox"
+                  name="terms"
+                  required
+                )
+                label.form-check-label(for="terms") I agree to the Terms of Service and Privacy Policy
+
+              // Submit button section with full-width button
+              .d-grid.gap-2
+                button.btn.btn-primary(type="submit") Create Account
+            
+            // Link to login page if the user already has an account
+            .mt-4.text-center
+              p Already have an account? 
+                a(href="/users/login") Login

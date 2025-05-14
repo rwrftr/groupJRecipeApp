@@ -283,3 +283,46 @@ router.post('/:id/comment', isAuthenticated, async (req, res) => {
     res.redirect(`/recipes/${req.params.id}`);
   }
 });
+
+// -----------------------------------------------------------------------------
+// DELETE COMMENT
+// -----------------------------------------------------------------------------
+router.post('/comment/:id/delete', isAuthenticated, async (req, res) => {
+  try {
+    const deleted = await Comment.delete(
+      req.params.id,
+      req.session.user.id
+    );
+
+    req.session[deleted ? 'success' : 'error'] =
+      deleted
+        ? 'Comment deleted successfully'
+        : 'Failed to delete comment. You can only delete your own comments.';
+
+    res.redirect(`/recipes/${req.body.recipe_id}`);
+  } catch (err) {
+    console.error('Error deleting comment:', err);
+    req.session.error = 'Failed to delete comment';
+    res.redirect('/');
+  }
+});
+
+// -----------------------------------------------------------------------------
+// PRINT FRIENDLY VIEW
+// -----------------------------------------------------------------------------
+router.get('/:id/print', async (req, res) => {
+  try {
+    const recipe = await Recipe.findById(req.params.id);
+    if (!recipe) {
+      req.session.error = 'Recipe not found';
+      return res.redirect('/');
+    }
+    res.render('recipes/print', { recipe });
+  } catch (err) {
+    console.error('Error printing recipe:', err);
+    req.session.error = 'Failed to generate print view';
+    res.redirect(`/recipes/${req.params.id}`);
+  }
+});
+
+module.exports = router;

@@ -30,3 +30,144 @@ block content
             src="/images/hero-image.jpg",
             alt="Delicious Food"
           )
+
+
+           //- -------------------------------------------------------------
+  //- Categories Section
+  //- -------------------------------------------------------------
+  //- Show up to eight recipe categories as clickable cards.
+  //- If no categories exist yet, display a friendly “no data” message.
+  section.py-5.bg-white
+    .container
+      h2.text-center.mb-4 Browse by Category
+      .row.justify-content-center
+        each category in categories ? categories.slice(0, 8) : []
+          .col-md-3.col-sm-6.mb-4
+            //- Each category card links to the filtered Explore page
+            a.text-decoration-none(href=`/explore?category=${category}`)
+              .card.h-100.border-0.shadow-sm.category-card
+                .card-body.text-center
+                  //- Icon for visual flair
+                  i.fas.fa-utensils.fa-2x.mb-3.text-primary
+                  //- Category name
+                  h5.card-title= category
+        else
+          //- Show this if the categories list is empty or undefined
+          .col-12.text-center
+            p Oh no—there are no categories to browse just yet!
+      
+      //- Link to view all categories, in case there are more than eight
+      .text-center.mt-3
+        a.btn.btn-outline-primary(href="/explore") View All Categories
+  
+  //- -------------------------------------------------------------
+  //- Latest Recipes Section
+  //- -------------------------------------------------------------
+  //- Display the newest recipes in a grid of cards.
+  //- If there aren’t any, show a message instead.
+  section.py-5.bg-light
+    .container
+      .d-flex.justify-content-between.align-items-center.mb-4
+        h2 Latest Recipes
+        a.btn.btn-sm.btn-outline-primary(href="/explore?sort=created_at&order=desc") View All
+      
+      .row
+        each recipe in latestRecipes || []
+          .col-md-3.col-sm-6.mb-4
+            .card.h-100.shadow-sm.recipe-card
+              //- Show custom image if available; otherwise a default placeholder
+              if recipe.image
+                img.card-img-top(src=`/${recipe.image}`, alt=recipe.title)
+              else
+                img.card-img-top(src="/images/default/default-recipe.jpg", alt=recipe.title)
+              .card-body
+                //- Recipe title
+                h5.card-title= recipe.title
+                //- Short text snippet (first 80 characters) for preview
+                p.card-text.text-muted.small=
+                  recipe.description.substring(0, 80)
+                  + (recipe.description.length > 80 ? '…' : '')
+                .d-flex.justify-content-between.align-items-center
+                  .rating
+                    //- Calculate a rounded star rating out of five
+                    - const rating = Math.round(recipe.avg_rating || 0)
+                    each val in [1, 2, 3, 4, 5]
+                      //- Solid star if below or equal to the rating, otherwise outline
+                      if val <= rating
+                        i.fas.fa-star.text-warning
+                      else
+                        i.far.fa-star.text-warning
+                    //- Show the exact average with one decimal place
+                    span.ms-1= (recipe.avg_rating || 0).toFixed(1)
+                  //- Show who created the recipe
+                  small.text-muted By #{recipe.username}
+              .card-footer.bg-white.border-top-0
+                //- Button to view full recipe details
+                a.btn.btn-sm.btn-primary.w-100(href=`/recipes/${recipe.id}`) View Recipe
+        else
+          //- Message when no latest recipes are found
+          .col-12.text-center
+            p No recipes here just yet—come back soon!
+  
+  //- -------------------------------------------------------------
+  //- Popular Recipes Section
+  //- -------------------------------------------------------------
+  //- Highlight top-rated recipes in a two-column layout.
+  section.py-5.bg-white
+    .container
+      .d-flex.justify-content-between.align-items-center.mb-4
+        h2 Popular Recipes
+        a.btn.btn-sm.btn-outline-primary(href="/explore?sort=avg_rating&order=desc") View All
+      
+      .row
+        each recipe in popularRecipes || []
+          .col-md-6.mb-4
+            .card.shadow-sm.border-0.overflow-hidden
+              .row.no-gutters
+                .col-md-5
+                  //- Responsive image that covers its column neatly
+                  img.card-img.h-100.w-100.object-cover(
+                    src=recipe.image ? `/${recipe.image}` : "/images/default/default-recipe.jpg",
+                    alt=recipe.title
+                  )
+                .col-md-7
+                  .card-body
+                    h5.card-title= recipe.title
+                    //- A slightly longer snippet (100 characters) here
+                    p.card-text.text-muted.small=
+                      recipe.description.substring(0, 100)
+                      + (recipe.description.length > 100 ? '…' : '')
+                    .d-flex.justify-content-between.align-items-center.mt-3
+                      .rating
+                        - const rating = Math.round(recipe.avg_rating || 0)
+                        each val in [1, 2, 3, 4, 5]
+                          if val <= rating
+                            i.fas.fa-star.text-warning
+                          else
+                            i.far.fa-star.text-warning
+                        //- Display average rating and total count of reviews
+                        span.ms-1= (recipe.avg_rating || 0).toFixed(1)
+                        span.text-muted.ms-1 (#{recipe.rating_count || 0})
+                      //- Button linking to the recipe’s detail page
+                      a.btn.btn-sm.btn-primary(href=`/recipes/${recipe.id}`) View Recipe
+        else
+          //- If no popular recipes are available, show a placeholder message
+          .col-12.text-center
+            p It looks quiet here—no popular recipes yet!
+  
+  //- -------------------------------------------------------------
+  //- Call to Action Section
+  //- -------------------------------------------------------------
+  //- Encourage visitors to join or contribute if they haven’t already.
+  section.py-5.bg-primary.text-white.text-center
+    .container
+      h2.mb-3 Ready to share your favorite recipe?
+      p.lead Join our community and start sharing your culinary masterpieces today!
+      .mt-4
+        //- If the user is logged in, they can go straight to creating a recipe
+        if user
+          a.btn.btn-light.btn-lg(href="/recipes/new") Create Recipe
+        //- Otherwise prompt them to sign up or log in first
+        else
+          a.btn.btn-light.btn-lg.me-2(href="/users/register") Sign Up
+          a.btn.btn-outline-light.btn-lg(href="/users/login") Login

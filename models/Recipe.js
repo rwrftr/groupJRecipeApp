@@ -201,4 +201,59 @@ class Recipe {
     }
   }
 
+  // ---------------------------------------------------------------------------
+  // Get every recipe authored by a specific user (for profile page).
+  // ---------------------------------------------------------------------------
+  static async getUserRecipes(userId) {
+    try {
+      const rows = await all(`
+        SELECT r.*,
+               (SELECT AVG(rating) FROM ratings WHERE recipe_id = r.id) AS avg_rating,
+               (SELECT COUNT(*)  FROM ratings WHERE recipe_id = r.id) AS rating_count
+        FROM recipes r
+        WHERE r.user_id = ?
+        ORDER BY r.created_at DESC
+      `, [userId]);
+
+      return rows;
+    } catch (error) {
+      console.error('Error getting user recipes:', error);
+      throw error;
+    }
+  }
+
+  // ---------------------------------------------------------------------------
+  // Create or update a rating for a recipe by a specific user.
+  // If they’ve rated before we overwrite, else we insert.
+  // ---------------------------------------------------------------------------
+  static async rateRecipe(recipeId, userId, rating) {
+    try {
+      // Check if this user already rated
+      const existing = await all(
+        'SELECT id FROM ratings WHERE recipe_id = ? AND user_id = ?',
+        [recipeId, userId]
+      );
+
+      if (existing.length) {
+        // Update
+        await run(
+          'UPDATE ratings SET rating = ? WHERE recipe_id = ? AND user_id = ?',
+          [rating, recipeId, userId]
+        );
+      } else {
+        // Insert
+        await run(
+          'INSERT INTO ratings (recipe_id, user_id, rating) VALUES (?, ?, ?)',
+          [recipeId, userId, rating]
+        );
+      }
+
+      return true;
+    } catch (error) {
+      console.error('Error rating recipe:', error);
+      throw error;
+    }
+  }
 }
+
+module.exports = Recipe;

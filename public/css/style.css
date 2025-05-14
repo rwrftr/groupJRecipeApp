@@ -43,3 +43,11 @@ main {
 .navbar-brand {
   font-weight: bold;
 }
+
+
+/* ================================================================================
+   Hero Section Spacing
+   --------------------------------------------------------------------------------
+   Add roomy vertical padding above and below the hero banner:
+   - 4rem top and bottom ensures the intro area feels open on large screens.
+   ================================================================================ */

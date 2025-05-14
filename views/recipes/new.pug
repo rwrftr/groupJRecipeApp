@@ -90,3 +90,47 @@ block content
                     required)
                   if errors && errors.cook_time
                     small.text-danger= errors.cook_time
+
+                //- Servings ------------------------------
+                .col-md-4.mb-3
+                  label.form-label(for="servings") Servings *
+                  input.form-control#servings(
+                    type="number",
+                    name="servings",
+                    min="1",
+                    value=formData && formData.servings || '',
+                    required)
+                  if errors && errors.servings
+                    small.text-danger= errors.servings
+              
+              //- ----------  IMAGE UPLOAD  ----------
+              .mb-3
+                label.form-label(for="image") Recipe Image
+                input.form-control#image(
+                  type="file",
+                  name="image",
+                  accept="image/*",
+                  data-preview-target="image-preview")   //- Hook for JS live preview
+                if errors && errors.image
+                  small.text-danger= errors.image
+                else
+                  small.text-muted Upload a photo of your dish (max 5 MB)
+                //- Live preview area (hidden until JS sets src)
+                .mt-2
+                  img#image-preview.img-fluid.rounded(
+                    src="",
+                    alt="Recipe preview",
+                    style="max-height: 200px; display: none;")
+              
+              //- ----------  INGREDIENTS  ----------
+              .mb-3
+                label.form-label(for="ingredients") Ingredients *
+                textarea.form-control#ingredients(
+                  name="ingredients",
+                  rows="6",
+                  required,
+                  placeholder="Enter each ingredient on a new line")= formData && formData.ingredients || ''
+                if errors && errors.ingredients
+                  small.text-danger= errors.ingredients
+                else
+                  small.text-muted List each ingredient on a new line

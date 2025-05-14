@@ -96,3 +96,33 @@ module.exports = {
   recipeValidationRules,
   ratingValidationRules
 };
+const { validationResult } = require('express-validator');
+
+// shared middleware to handle validation results
+const validate = (req, res, next) => {
+  const errors = validationResult(req);
+  if (errors.isEmpty()) {
+    return next();
+  }
+
+  // api requests get json errors
+  if (req.path.startsWith('/api/')) {
+    return res.status(422).json({ 
+      status: 'error',
+      errors: errors.array().map(err => ({ field: err.param, message: err.msg }))
+    });
+  }
+
+  // web requests get redirected with session error data
+  req.session.formData = req.body;
+  req.session.errors = errors.array().reduce((acc, err) => {
+    acc[err.param] = err.msg;
+    return acc;
+  }, {});
+
+  return res.redirect('back');
+};
+
+module.exports = {
+  validate
+};

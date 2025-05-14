@@ -39,4 +39,35 @@ class Recipe {
       throw error; // bubble up so the controller can handle it
     }
   }
+
+    // ---------------------------------------------------------------------------
+  // Grab a filtered/sorted/paginated list of recipes.
+  // `options` can hold { category, search, sortBy, sortOrder, limit, offset }.
+  // ---------------------------------------------------------------------------
+  static async getAll(options = {}) {
+    try {
+      let query = `
+        SELECT r.*, u.username,
+               (SELECT AVG(rating) FROM ratings WHERE recipe_id = r.id) AS avg_rating,
+               (SELECT COUNT(*) FROM ratings WHERE recipe_id = r.id) AS rating_count
+        FROM recipes r
+        JOIN users u ON r.user_id = u.id
+      `;
+
+      const queryParams = [];
+
+      // --- Category filter ---------------------------------------------------
+      if (options.category) {
+        query += ' WHERE r.category = ?';
+        queryParams.push(options.category);
+      }
+
+      const rows = await all(query, queryParams);
+      return rows;
+    } catch (error) {
+      console.error('Error getting recipes:', error);
+      throw error;
+    }
+  }
+
 }

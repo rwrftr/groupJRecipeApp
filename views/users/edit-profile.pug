@@ -1,0 +1,94 @@
+// Extends the base layout template
+extends ../layout
+
+// Main content block for the edit profile page
+block content
+  .container.py-5 // Bootstrap container with vertical padding
+    .row.justify-content-center
+      .col-md-8
+        .card.shadow-sm // Card component with a subtle shadow
+          .card-header.bg-primary.text-white // Card header with primary background and white text
+            h4.card-title.mb-0 Edit Profile // Header title
+          .card-body
+            // Form to submit profile changes (supports file uploads)
+            form(action="/users/edit-profile", method="POST", enctype="multipart/form-data")
+              
+              // Section to display current profile image
+              .mb-4.text-center
+                if formData && formData.profile_image
+                  // Show uploaded image if it exists
+                  img.rounded-circle.profile-image(
+                    src=`/${formData.profile_image}`,
+                    alt=formData.username,
+                    style="width: 150px; height: 150px; object-fit: cover; border: 5px solid #fff; box-shadow: 0 0 10px rgba(0,0,0,0.1);"
+                  )
+                else
+                  // Fallback to default image
+                  img.rounded-circle.profile-image(
+                    src="/images/default/default-profile.jpg",
+                    alt="Default profile",
+                    style="width: 150px; height: 150px; object-fit: cover; border: 5px solid #fff; box-shadow: 0 0 10px rgba(0,0,0,0.1);"
+                  )
+              
+              // Username input field
+              .mb-3
+                label.form-label(for="username") Username
+                input.form-control#username(
+                  type="text",
+                  name="username",
+                  value=formData && formData.username || '',
+                  required
+                )
+                // Show validation error for username
+                if errors && errors.username
+                  small.text-danger= errors.username
+              
+              // Email input field
+              .mb-3
+                label.form-label(for="email") Email Address
+                input.form-control#email(
+                  type="email",
+                  name="email",
+                  value=formData && formData.email || '',
+                  required
+                )
+                // Show validation error for email
+                if errors && errors.email
+                  small.text-danger= errors.email
+              
+              // Profile image upload input
+              .mb-3
+                label.form-label(for="profile_image") Profile Image
+                input.form-control#profile_image(
+                  type="file",
+                  name="profile_image",
+                  accept="image/*",
+                  data-preview-target="profile-preview"
+                )
+                // Show error or helper text
+                if errors && errors.profile_image
+                  small.text-danger= errors.profile_image
+                else
+                  small.text-muted Upload a new profile picture (max 2MB)
+                // Hidden image preview that updates when a new file is selected
+                .mt-2
+                  img#profile-preview.rounded-circle.mx-auto.d-block(
+                    src="",
+                    alt="Profile preview",
+                    style="width: 100px; height: 100px; object-fit: cover; display: none;"
+                  )
+              
+              // Buttons to cancel or submit changes
+              .d-flex.justify-content-between.mt-4
+                a.btn.btn-outline-secondary(href="/users/profile") Cancel
+                button.btn.btn-primary(type="submit")
+                  i.fas.fa-save.me-1
+                  | Save Changes
+
+// JavaScript block to handle preview functionality
+block scripts
+  script.
+    document.addEventListener('DOMContentLoaded', function() {
+      // Initialize image preview after the page loads
+      initializeImagePreview();
+    });

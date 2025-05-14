@@ -30,3 +30,63 @@ block content
                     name="title",
                     value=formData && formData.title || '',
                     required)
+                  //- Show server error if provided
+                  if errors && errors.title
+                    small.text-danger= errors.title
+
+                //- Category (select) ----------------------
+                .col-md-6.mb-3
+                  label.form-label(for="category") Category *
+                  select.form-select#category(
+                    name="category",
+                    required)
+                    //- Default blank option
+                    option(value="", selected=!formData || !formData.category) Select a category
+                    //- Render common categories (could come from DB in real app)
+                    each category in [
+                      'Appetizers', 'Main Dishes', 'Desserts', 'Breakfast', 'Lunch',
+                      'Dinner', 'Snacks', 'Soups', 'Salads', 'Beverages',
+                      'Baked Goods', 'Vegan', 'Vegetarian', 'Gluten-Free', 'Low-Carb']
+                      option(
+                        value=category,
+                        selected=formData && formData.category === category)= category
+                  if errors && errors.category
+                    small.text-danger= errors.category
+
+              //- ----------  DESCRIPTION  ----------
+              .mb-3
+                label.form-label(for="description") Description *
+                textarea.form-control#description(
+                  name="description",
+                  rows="3",
+                  required)= formData && formData.description || ''
+                if errors && errors.description
+                  small.text-danger= errors.description
+                else
+                  small.text-muted Briefly describe your recipe (max 500 characters)
+              
+              //- ----------  PREP / COOK / SERVINGS  ----------
+              .row
+                //- Prep Time -----------------------------
+                .col-md-4.mb-3
+                  label.form-label(for="prep_time") Preparation Time (minutes) *
+                  input.form-control#prep_time(
+                    type="number",
+                    name="prep_time",
+                    min="1",
+                    value=formData && formData.prep_time || '',
+                    required)
+                  if errors && errors.prep_time
+                    small.text-danger= errors.prep_time
+                
+                //- Cook Time -----------------------------
+                .col-md-4.mb-3
+                  label.form-label(for="cook_time") Cooking Time (minutes) *
+                  input.form-control#cook_time(
+                    type="number",
+                    name="cook_time",
+                    min="0",
+                    value=formData && formData.cook_time || '',
+                    required)
+                  if errors && errors.cook_time
+                    small.text-danger= errors.cook_time

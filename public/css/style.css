@@ -40,3 +40,6 @@ main {
    Give extra emphasis to the brand/logo text inside the navbar:
    - Use a bold font weight to make the site name stand out.
    ================================================================================ */
+.navbar-brand {
+  font-weight: bold;
+}

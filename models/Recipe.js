@@ -127,4 +127,78 @@ class Recipe {
     }
   }
 
+  // ---------------------------------------------------------------------------
+  // Update the given recipe *only* if it belongs to `userId`.
+  // Accepts a partial object (`recipeData`) and ignores fields we don’t allow.
+  // Returns true if something changed, false otherwise.
+  // ---------------------------------------------------------------------------
+  static async update(id, recipeData, userId) {
+    try {
+      const allowed = [
+        'title', 'description', 'ingredients', 'instructions',
+        'prep_time', 'cook_time', 'servings', 'category', 'image'
+      ];
+
+      const updates = [];
+      const values  = [];
+
+      Object.keys(recipeData).forEach(key => {
+        if (allowed.includes(key)) {
+          updates.push(`${key} = ?`);
+          values.push(recipeData[key]);
+        }
+      });
+
+      if (updates.length === 0) return false; // nothing to update
+
+      // push id + owner check into the param list
+      values.push(id, userId);
+
+      const result = await run(
+        `UPDATE recipes
+            SET ${updates.join(', ')},
+                updated_at = CURRENT_TIMESTAMP
+          WHERE id = ? AND user_id = ?`,
+        values
+      );
+
+      return result.changes > 0;
+    } catch (error) {
+      console.error('Error updating recipe:', error);
+      throw error;
+    }
+  }
+
+  // ---------------------------------------------------------------------------
+  // Hard-delete a recipe if the user owns it.
+  // ---------------------------------------------------------------------------
+  static async delete(id, userId) {
+    try {
+      const result = await run(
+        'DELETE FROM recipes WHERE id = ? AND user_id = ?',
+        [id, userId]
+      );
+
+      return result.changes > 0;
+    } catch (error) {
+      console.error('Error deleting recipe:', error);
+      throw error;
+    }
+  }
+
+  // ---------------------------------------------------------------------------
+  // Return a simple array of all distinct categories (for dropdowns, etc.).
+  // ---------------------------------------------------------------------------
+  static async getCategories() {
+    try {
+      const rows = await all(
+        'SELECT DISTINCT category FROM recipes ORDER BY category'
+      );
+      return rows.map(r => r.category);
+    } catch (error) {
+      console.error('Error getting categories:', error);
+      throw error;
+    }
+  }
+
 }

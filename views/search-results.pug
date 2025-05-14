@@ -17,3 +17,93 @@ extends layout
 block content
   //- Wrap everything in a padded container for nice spacing
   .container.py-5
+
+
+   //- -----------------------------------------------------------
+    //- Header Row: shows the search term and result count,
+    //- plus a search box so the user can tweak their query.
+    //- -----------------------------------------------------------
+    .row.mb-4
+      .col-md-8
+        //- Display the search query in the page title
+        h1 Search Results: "#{searchTerm}"
+        //- Show how many recipes matched
+        p.lead Found #{count} recipes matching your search
+      .col-md-4
+        //- Let the user immediately try a new search
+        form.d-flex(action="/search", method="GET")
+          input.form-control.me-2(
+            type="search",
+            name="q",
+            placeholder="Search recipes...",
+            value=searchTerm
+          )
+          button.btn.btn-primary(type="submit")
+            i.fas.fa-search
+
+    //- -----------------------------------------------------------
+    //- Results Grid:
+    //- If there are recipes, render each one as a card in a 3-column layout.
+    //- Otherwise, show a “no recipes found” message with a call-to-action.
+    //- -----------------------------------------------------------
+    if recipes && recipes.length
+      .row
+        each recipe in recipes
+          .col-md-4.mb-4
+            //- A Bootstrap card for each recipe
+            .card.h-100.shadow-sm.recipe-card
+              //- Show the recipe’s image if it exists; otherwise show a default pic
+              if recipe.image
+                img.card-img-top(src=`/${recipe.image}`, alt=recipe.title)
+              else
+                img.card-img-top(src="/images/default/default-recipe.jpg", alt=recipe.title)
+
+              .card-body
+                //- The recipe title
+                h5.card-title= recipe.title
+
+                //- A short snippet from the description (first 80 characters)
+                p.card-text.text-muted.small=
+                  recipe.description.substring(0, 80) +
+                  (recipe.description.length > 80 ? '...' : '')
+
+                //- Inline area for star rating and category badge
+                .d-flex.justify-content-between.align-items-center
+                  .rating
+                    //- Round the average rating to the nearest whole number
+                    - const rating = Math.round(recipe.avg_rating || 0)
+                    //- Loop to display up to five stars
+                    each val in [1, 2, 3, 4, 5]
+                      if val <= rating
+                        //- Solid star for each point
+                        i.fas.fa-star.text-warning
+                      else
+                        //- Outline star for the rest
+                        i.far.fa-star.text-warning
+                    //- Display the precise average (e.g. “4.2”)
+                    span.ms-1= (recipe.avg_rating || 0).toFixed(1)
+
+                  //- Show the recipe’s category as a badge
+                  span.badge.bg-primary= recipe.category
+
+              .card-footer.bg-white.border-top-0.d-flex.justify-content-between.align-items-center
+                //- Credit the author of the recipe
+                small.text-muted By #{recipe.username}
+                //- Button to view the full recipe details
+                a.btn.btn-sm.btn-primary(href=`/recipes/${recipe.id}`) View
+    else
+      //- -----------------------------------------------------------
+      //- No Results Card:
+      //- Friendly feedback when the search returns nothing.
+      //- -----------------------------------------------------------
+      .card.shadow-sm
+        .card-body.text-center.py-5
+          //- A big search icon to visually reinforce “no results”
+          i.fas.fa-search.fa-3x.text-muted.mb-3
+          //- Main message
+          h3 No recipes found
+          //- Suggestion to try different keywords
+          p.text-muted Try different keywords or browse categories
+          .mt-4
+            //- Button to explore all recipes instead
+            a.btn.btn-primary(href="/explore") Browse All Recipes

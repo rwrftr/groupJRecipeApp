@@ -17,12 +17,12 @@ extends ../layout
 
 block content
   .container.py-5
-    //- If we have a recipe, render it otherwise show a missing recipe notice
+    //- If we have a recipe, render its details; otherwise show a 404-style notice
     if recipe
-      //- Recipe Header
+      //- ===========================  HEADER  ===========================
       .row.mb-4
         .col-md-8
-          //- Title and rating summary
+          //- ----- Title and basic rating summary -----
           h1.mb-3= recipe.title
           .d-flex.align-items-center
             .rating.me-3
@@ -81,7 +81,7 @@ block content
                 href=`mailto:?subject=${encodeURIComponent(`Recipe: ${recipe.title}`)}&body=${encodeURIComponent(`Check out this recipe: ${currentUrl}`)}`,
                 title="Share via Email")
                 i.fas.fa-envelope
-
+        
         //- ----- Print / Edit / Delete controls (owner-only for edit & delete) -----
         .col-md-4.text-md-end
           .btn-group
@@ -99,8 +99,7 @@ block content
                 button.btn.btn-outline-danger(type="submit")
                   i.fas.fa-trash.me-1
                   | Delete
-
-
+      
       //- ===========================  MAIN  IMAGE + DESCRIPTION  ===========================
       .row
         //- Recipe image (fallback to generic placeholder)
@@ -108,14 +107,14 @@ block content
           img.img-fluid.rounded.recipe-detail-img(
             src=recipe.image ? `/${recipe.image}` : "/images/default/default-recipe.jpg",
             alt=recipe.title)
-
+        
         //- Short textual description card
         .col-md-6.mb-4
           .card.shadow-sm.h-100
             .card-body
               h4.card-title.mb-3 Description
-              p.card-text= recipe.description     
-
+              p.card-text= recipe.description
+      
       //- ===========================  INGREDIENTS & INSTRUCTIONS  ===========================
       .row
         //- ---- Ingredients list ----
@@ -131,7 +130,7 @@ block content
                     li
                       i.fas.fa-check-circle.text-primary.me-2
                       | #{ingredient.trim()}
-
+        
         //- ---- Step-by-step instructions ----
         .col-md-8.mb-4
           .card.shadow-sm.h-100
@@ -142,7 +141,7 @@ block content
                 each instruction in recipe.instructions.split('\n')
                   if instruction.trim()
                     li #{instruction.trim()}
-
+      
       //- ===========================  VISITOR RATING FORM  ===========================
       if user && recipe.user_id !== user.id
         .row.mt-4
@@ -156,9 +155,9 @@ block content
                     each val in [1, 2, 3, 4, 5]
                       i.far.fa-star.fa-2x.rating-star.me-1(data-value=val)
                     //- Hidden field is updated by JS when a star is clicked
-                    input(type="hidden" name="rating" value="0")
+                    input(type="hidden", name="rating", value="0")
                   button.btn.btn-primary(type="submit") Submit Rating
-
+      
       //- ===========================  AUTHOR CARD  ===========================
       .row.mt-4
         .col-md-4.offset-md-4.text-center
@@ -181,7 +180,7 @@ block content
               h5.card-title.mb-0 
                 i.fas.fa-comments.me-2
                 | Comments (#{comments ? comments.length : 0})
-
+            
             //- --- Leave a comment (only when logged in) ---
             if user
               .card-body.border-bottom
@@ -194,7 +193,7 @@ block content
                       placeholder="Share your thoughts about this recipe...",
                       required)
                   button.btn.btn-primary(type="submit") Post Comment
-
+            
             //- --- List existing comments ---
             if comments && comments.length > 0
               ul.list-group.list-group-flush
@@ -214,16 +213,25 @@ block content
                           //- Show delete icon if current user is comment author OR recipe owner
                           if user && (user.id === comment.user_id || user.id === recipe.user_id)
                             form(action=`/recipes/comment/${comment.id}/delete`, method="POST")
-                              input(type="hidden" name="recipe_id", value=recipe.id)
-                              button.btn.btn-sm.text-danger(type="submit" title="Delete comment")
+                              input(type="hidden", name="recipe_id", value=recipe.id)
+                              button.btn.btn-sm.text-danger(type="submit", title="Delete comment")
                                 i.fas.fa-times
-                        p.mt-2.mb-0= comment.content            
-              else
-                .card-body.text-center.py-4
-                  p.text-muted No comments yet. Be the first to comment!
+                        p.mt-2.mb-0= comment.content
+            else
+              .card-body.text-center.py-4
+                p.text-muted No comments yet. Be the first to comment!
     else
+      //- 404-style fallback for missing recipe
       .alert.alert-warning
         h2.text-center Recipe not found
         p.text-center The recipe you're looking for might have been removed or doesn't exist.
         .text-center.mt-4
           a.btn.btn-primary(href="/explore") Explore Recipes
+
+block scripts
+  //- Inline JS: activate client-side rating stars after DOM load
+  script.
+    document.addEventListener('DOMContentLoaded', function() {
+      // Initialize rating system if it exists
+      initializeRatingSystem();
+    });

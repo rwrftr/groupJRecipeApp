@@ -1,0 +1,10 @@
+/* ================================================================================
+   Main Page Layout & Typography
+   --------------------------------------------------------------------------------
+   This section establishes the core look and behavior of the entire site:
+   1. Sets a clean, widely supported sans‑serif font stack for readability.
+   2. Uses Flexbox on the body to stack header, main content, and footer vertically.
+   3. Ensures the page always fills at least the full viewport height so the footer
+      stays at the bottom, even on short pages.
+   ================================================================================ */
+   

@@ -55,3 +55,33 @@ block content
               li.list-group-item
                 i.fas.fa-check-circle.text-primary.me-2
                 | Connect with other food enthusiasts
+
+          //- Food bloggers perks
+          .col-md-6
+            h4 For Food Bloggers
+            ul.list-group.list-group-flush.mb-4
+              li.list-group-item
+                i.fas.fa-check-circle.text-primary.me-2
+                | Showcase your culinary creations
+              li.list-group-item
+                i.fas.fa-check-circle.text-primary.me-2
+                | Build a following of fans who love your recipes
+              li.list-group-item
+                i.fas.fa-check-circle.text-primary.me-2
+                | Receive valuable feedback through ratings and comments
+    
+    //- ---------- Final call-to-action card ----------
+    .row
+      .col-md-8.offset-md-2.text-center
+        .card.shadow-sm.p-4.bg-light
+          h2.mb-3 Join Our Community
+          p.mb-4 Ready to share your culinary masterpieces or find inspiration for your next meal?
+          
+          //- Logged-in users see “Share / Explore”; guests see “Sign Up / Login”
+          .d-flex.justify-content-center
+            if user
+              a.btn.btn-primary.me-3(href="/recipes/new") Share a Recipe
+              a.btn.btn-outline-primary(href="/explore") Explore Recipes
+            else
+              a.btn.btn-primary.me-3(href="/users/register") Sign Up
+              a.btn.btn-outline-primary(href="/users/login") Login

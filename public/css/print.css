@@ -34,3 +34,152 @@
   .author-section {
     display: none !important;
   }
+
+   /* ----------------------------------------------------------------------------  
+     2. Page margin reset  
+     Use @page to control the printable area’s margins.  
+     A small, consistent 0.5cm margin maximizes space while leaving white borders.  
+     ---------------------------------------------------------------------------- */
+  @page {
+    margin: 0.5cm;
+  }
+
+  /* ----------------------------------------------------------------------------  
+     3. Base typography and colors  
+     - Serif font for comfortable reading on paper  
+     - 12pt font size with 1.3 line height for clarity  
+     - Force a white background and black text for high contrast  
+     ---------------------------------------------------------------------------- */
+  body {
+    font-family: serif;
+    font-size: 12pt;
+    line-height: 1.3;
+    background: #fff !important;
+    color: #000 !important;
+  }
+
+  /* ----------------------------------------------------------------------------  
+     4. Full-width container  
+     Remove any padding or width limits so the content fills page width  
+     between the margins.  
+     ---------------------------------------------------------------------------- */
+  .container {
+    width: 100%;
+    max-width: 100%;
+    padding: 0;
+    margin: 0;
+  }
+
+  /* ============================================================================  
+     5. Header styling  
+     ============================================================================ */
+
+  /* Center the header and add space beneath it to separate from the rest. */
+  .recipe-header {
+    text-align: center;
+    margin-bottom: 1cm;
+  }
+
+  /* Make the recipe title large and eye-catching for print. */
+  .recipe-header h1 {
+    font-size: 24pt;
+    margin-bottom: 0.5cm;
+  }
+
+  /* Style metadata (prep time, servings) in a slightly smaller, gray font  
+     so it’s distinct from the main text. */
+  .recipe-meta {
+    font-size: 10pt;
+    color: #333 !important;
+  }
+
+  /* ============================================================================  
+     6. Main content styling: images, description, lists  
+     ============================================================================ */
+
+  /* Separate the main content from what follows. */
+  .recipe-content {
+    margin-bottom: 1cm;
+  }
+
+  /* Recipe image rules:  
+     - Constrain to a 10cm square so images don’t overflow  
+     - Center the image block and add space underneath  
+     ---------------------------------------------------------------------------- */
+  .recipe-image {
+    max-width: 10cm;
+    max-height: 10cm;
+    margin: 0 auto 1cm;
+    display: block;
+  }
+
+  /* Italicize the description to set it apart, and give it breathing room. */
+  .recipe-description {
+    margin-bottom: 1cm;
+    font-style: italic;
+  }
+
+  /* Add space after the ingredients and instructions sections to keep them tidy. */
+  .recipe-ingredients,
+  .recipe-instructions {
+    margin-bottom: 1cm;
+  }
+
+  /* Headings for Ingredients/Instructions:  
+     - Larger font size for emphasis  
+     - Subtle underline with a bottom border  
+     - Padding below to separate heading from list  
+     ---------------------------------------------------------------------------- */
+  .recipe-ingredients h2,
+  .recipe-instructions h2 {
+    font-size: 16pt;
+    margin-bottom: 0.5cm;
+    border-bottom: 1pt solid #ccc;
+    padding-bottom: 0.2cm;
+  }
+
+  /* List items spacing: add space below each item for readability. */
+  .ingredients-list li,
+  .instructions-list li {
+    margin-bottom: 0.3cm;
+  }
+
+  /* ============================================================================  
+     7. Page break control  
+     ============================================================================ */
+
+  /* Keep headings with their content by avoiding breaks right after them. */
+  h1, h2 {
+    page-break-after: avoid;
+  }
+
+  /* Prevent images and entire lists from splitting across pages. */
+  img, ul, ol {
+    page-break-inside: avoid;
+  }
+
+  /* ============================================================================  
+     8. Show URLs for links  
+     ============================================================================ */
+
+  /* After every link, append its URL in parentheses so readers on paper  
+     know where it points. */
+  a::after {
+    content: " (" attr(href) ")";
+    font-size: 90%;
+  }
+
+  /* ============================================================================  
+     9. Footer attribution  
+     ============================================================================ */
+
+  /* In the footer area, add space above, a thin top border, and center the text.  
+     Use a small font for credits or copyright. */
+  .recipe-footer {
+    margin-top: 1cm;
+    padding-top: 0.5cm;
+    border-top: 1pt solid #ccc;
+    font-size: 9pt;
+    text-align: center;
+  }
+}

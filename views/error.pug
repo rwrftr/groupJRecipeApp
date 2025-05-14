@@ -1,0 +1,27 @@
+//- using base layout
+extends layout
+
+block content
+  .container.py-5
+    .row.justify-content-center
+      .col-md-8.text-center
+        //- big error icon
+        i.fas.fa-exclamation-circle.text-danger.fa-5x.mb-4
+
+        //- main message
+        h1.display-4 Oops! Something went wrong
+        h2.text-danger= message || 'Error'
+
+        //- show error code if it's there
+        if error && error.status
+          p.lead Error #{error.status}
+
+        //- show full stack in dev only
+        if error && error.stack && process.env.NODE_ENV === 'development'
+          pre.alert.alert-danger.mt-4.text-start
+            code= error.stack
+
+        //- go home or go back options
+        .mt-5
+          a.btn.btn-primary.me-2(href="/") Go Home
+          a.btn.btn-outline-primary(href="javascript:history.back()") Go Back

@@ -27,7 +27,7 @@ block content
         .col-md-6
           //- A mouth-watering hero image to set the mood
           img.img-fluid.rounded.shadow(
-            src="/images/hero-image.jpg",
+            src="/images/default/default-recipe.jpg",
             alt="Delicious Food"
           )
 
@@ -77,9 +77,9 @@ block content
             .card.h-100.shadow-sm.recipe-card
               //- Show custom image if available; otherwise a default placeholder
               if recipe.image
-                img.card-img-top(src=`/${recipe.image}`, alt=recipe.title)
+                img.card-img-top(src=recipe.image alt=recipe.title)
               else
-                img.card-img-top(src="/images/default/default-recipe.jpg", alt=recipe.title)
+                img.card-img-top(src="/images/default/default-recipe.jpg" alt=recipe.title)
               .card-body
                 //- Recipe title
                 h5.card-title= recipe.title
@@ -127,7 +127,7 @@ block content
                 .col-md-5
                   //- Responsive image that covers its column neatly
                   img.card-img.h-100.w-100.object-cover(
-                    src=recipe.image ? `/${recipe.image}` : "/images/default/default-recipe.jpg",
+                    src=recipe.image || "/images/default/default-recipe.jpg",
                     alt=recipe.title
                   )
                 .col-md-7

@@ -68,3 +68,34 @@ User.authenticate = async function (email, password) {
     throw error;
   }
 };
+
+// update allowed fields (username, email, image)
+User.update = async function (id, updateData) {
+    try {
+      const allowedFields = ['username', 'email', 'profile_image'];
+      const updates = [];
+      const values = [];
+  
+      Object.keys(updateData).forEach(key => {
+        if (allowedFields.includes(key)) {
+          updates.push(`${key} = ?`);
+          values.push(updateData[key]);
+        }
+      });
+  
+      if (updates.length === 0) return false;
+  
+      values.push(id);
+  
+      const result = await run(
+        `UPDATE users SET ${updates.join(', ')}, updated_at = CURRENT_TIMESTAMP WHERE id = ?`,
+        values
+      );
+  
+      return result.changes > 0;
+    } catch (error) {
+      console.error('Error updating user:', error);
+      throw error;
+    }
+  };
+  

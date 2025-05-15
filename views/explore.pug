@@ -1,6 +1,5 @@
 extends layout
 
-//- Browse / search page for recipes
 block content
   .container.py-5
     //- ---------- header ----------
@@ -67,11 +66,7 @@ block content
               )
                 i.fas.fa-sort.me-1
                 | Sort by:
-                span.fw-bold= currentSort === 'avg_rating'
-                  ? 'Rating'
-                  : currentSort === 'title'
-                    ? 'Title'
-                    : 'Newest'
+                span.fw-bold= currentSort === 'avg_rating' ? 'Rating' : currentSort === 'title' ? 'Title' : 'Newest'
               ul.dropdown-menu.dropdown-menu-end
                 li
                   a.dropdown-item.sort-option(
@@ -121,8 +116,7 @@ block content
                     img.card-img-top(src="/images/default/default-recipe.jpg", alt=recipe.title)
                   .card-body
                     h5.card-title= recipe.title
-                    p.card-text.text-muted.small=
-                      recipe.description.substring(0, 80) + (recipe.description.length > 80 ? '...' : '')
+                    p.card-text.text-muted.small= recipe.description.substring(0, 80) + (recipe.description.length > 80 ? '...' : '')
                     .d-flex.justify-content-between.align-items-center
                       .rating
                         - const rating = Math.round(recipe.avg_rating || 0)

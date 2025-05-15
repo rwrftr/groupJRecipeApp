@@ -1,32 +1,30 @@
-// Extends a base layout template to maintain consistent design
 extends ../layout
 
-// Defines the 'content' block for this page
 block content
-  .container.py-5 // Bootstrap container with padding
-    .row.justify-content-center // Center the row content
-      .col-md-6 // Column that takes up half the width on medium+ screens
-        .card.shadow-sm // Card UI component with a small shadow
-          .card-header.bg-primary.text-white // Card header with primary color background and white text
-            h4.card-title.mb-0 Create an Account // Title inside the header
-          .card-body // Main content area of the card
+  .container.py-5 
+    .row.justify-content-center
+      .col-md-6
+        .card.shadow-sm 
+          .card-header.bg-primary.text-white 
+            h4.card-title.mb-0 Create an Account 
+          .card-body 
             // Start of the form, sending POST request to /users/register
             form(action="/users/register", method="POST")
               
               // Username input field
               .mb-3
-                label.form-label(for="username") Username // Label for username input
+                label.form-label(for="username") Username 
                 input.form-control#username(
                   type="text"
                   name="username"
-                  value=formData && formData.username || '' // Preserves input on form error
+                  value=formData && formData.username || ''
                   required
                 )
                 // Show error if there's a username error
                 if errors && errors.username
                   small.text-danger= errors.username
                 else
-                  small.text-muted Username can contain letters, numbers, and underscores // Hint text
+                  small.text-muted Username can contain letters, numbers, and underscores 
 
               // Email input field
               .mb-3
@@ -34,7 +32,7 @@ block content
                 input.form-control#email(
                   type="email"
                   name="email"
-                  value=formData && formData.email || '' // Preserves input on error
+                  value=formData && formData.email || ''
                   required
                 )
                 // Show email-specific error

@@ -3,7 +3,7 @@ extends layout
 //- Browse / search page for recipes
 block content
   .container.py-5
-    //- Header
+    //- ---------- header ----------
     .row.mb-4
       .col-md-8
         if currentCategory
@@ -19,15 +19,15 @@ block content
           if currentCategory
             input(type="hidden", name="category", value=currentCategory)
           input.form-control.me-2(
-            type="search", 
-            name="search", 
-            placeholder="Search recipes...", 
+            type="search",
+            name="search",
+            placeholder="Search recipes...",
             value=currentSearch
           )
           button.btn.btn-primary(type="submit")
             i.fas.fa-search
-        
-        //- ---------- Sidebar filters + main grid ----------
+    
+    //- ---------- Sidebar filters + main grid ----------
     .row.mb-4
       //- ------- Category list on the left -------
       .col-md-3
@@ -108,44 +108,97 @@ block content
                     data-order="desc",
                     class=currentSort === 'title' && currentOrder === 'desc' ? 'active' : ''
                   ) Title (Z-A)
+        
+        //- ------- Recipe cards -------
+        if recipes && recipes.length
+          .row
+            each recipe in recipes
+              .col-md-4.mb-4
+                .card.h-100.shadow-sm.recipe-card
+                  if recipe.image
+                    img.card-img-top(src=`/${recipe.image}`, alt=recipe.title)
+                  else
+                    img.card-img-top(src="/images/default/default-recipe.jpg", alt=recipe.title)
+                  .card-body
+                    h5.card-title= recipe.title
+                    p.card-text.text-muted.small=
+                      recipe.description.substring(0, 80) + (recipe.description.length > 80 ? '...' : '')
+                    .d-flex.justify-content-between.align-items-center
+                      .rating
+                        - const rating = Math.round(recipe.avg_rating || 0)
+                        each val in [1, 2, 3, 4, 5]
+                          if val <= rating
+                            i.fas.fa-star.text-warning
+                          else
+                            i.far.fa-star.text-warning
+                        span.ms-1= (recipe.avg_rating || 0).toFixed(1)
+                      span.badge.bg-primary= recipe.category
+                  .card-footer.bg-white.border-top-0.d-flex.justify-content-between.align-items-center
+                    small.text-muted By #{recipe.username}
+                    a.btn.btn-sm.btn-primary(href=`/recipes/${recipe.id}`) View
           
-      //- ------- Recipe cards -------
-      if recipes && recipes.length
-        .row
-          each recipe in recipes
-            .col-md-4.mb-4
-              .card.h-100.shadow-sm.recipe-card
-                if recipe.image
-                  img.card-img-top(src=`/${recipe.image}`, alt=recipe.title)
-                else
-                  img.card-img-top(src="/images/default/default-recipe.jpg", alt=recipe.title)
-                .card-body
-                  h5.card-title= recipe.title
-                  p.card-text.text-muted.small=
-                    recipe.description.substring(0, 80) + (recipe.description.length > 80 ? '...' : '')
-                  .d-flex.justify-content-between.align-items-center
-                    .rating
-                      - const rating = Math.round(recipe.avg_rating || 0)
-                      each val in [1, 2, 3, 4, 5]
-                        if val <= rating
-                          i.fas.fa-star.text-warning
-                        else
-                          i.far.fa-star.text-warning
-                      span.ms-1= (recipe.avg_rating || 0).toFixed(1)
-                    span.badge.bg-primary= recipe.category
-                .card-footer.bg-white.border-top-0.d-flex.justify-content-between.align-items-center
-                  small.text-muted By #{recipe.username}
-                  a.btn.btn-sm.btn-primary(href=`/recipes/${recipe.id}`) View
-      else
-        //- Empty-state card when nothing matches
-        .card.shadow-sm
-          .card-body.text-center.py-5
-            i.fas.fa-search.fa-3x.text-muted.mb-3
-            h3 No recipes found
-            p.text-muted Try a different search term or category
-            if user
-              a.btn.btn-primary.mt-3(href="/recipes/new")
-                i.fas.fa-plus.me-1
-                | Create a Recipe
-            else
-              a.btn.btn-primary.mt-3(href="/users/login") Login to share recipes
+          //- Placeholder for future pagination (disabled for now)
+          if false
+            nav.mt-4
+              ul.pagination.justify-content-center
+                li.page-item(class=page === 1 ? 'disabled' : '')
+                  a.page-link(href=`/explore?page=${page-1}`) Previous
+                li.page-item(class=page === 1 ? 'active' : '')
+                  a.page-link(href="/explore?page=1") 1
+                li.page-item(class=page === 2 ? 'active' : '')
+                  a.page-link(href="/explore?page=2") 2
+                li.page-item(class=page === 3 ? 'active' : '')
+                  a.page-link(href="/explore?page=3") 3
+                li.page-item(class=page === 4 ? 'disabled' : '')
+                  a.page-link(href=`/explore?page=${page+1}`) Next
+        else
+          //- Empty-state card when nothing matches
+          .card.shadow-sm
+            .card-body.text-center.py-5
+              i.fas.fa-search.fa-3x.text-muted.mb-3
+              h3 No recipes found
+              p.text-muted Try a different search term or category
+              if user
+                a.btn.btn-primary.mt-3(href="/recipes/new")
+                  i.fas.fa-plus.me-1
+                  | Create a Recipe
+              else
+                a.btn.btn-primary.mt-3(href="/users/login") Login to share recipes
+
+//- Small client-side helpers for category + sort links
+block scripts
+  script.
+    document.addEventListener('DOMContentLoaded', () => {
+      const categoryFilters = document.querySelectorAll('.category-filter');
+      const sortOptions     = document.querySelectorAll('.sort-option');
+      
+      // jump to chosen category, keep search term if it exists
+      categoryFilters.forEach(link => {
+        link.addEventListener('click', e => {
+          e.preventDefault();
+          const url = new URL(window.location);
+          const cat = link.dataset.category;
+          
+          if (cat) url.searchParams.set('category', cat);
+          else     url.searchParams.delete('category');
+          
+          if ('#{currentSearch}') { // server interpolates actual value
+            url.searchParams.set('search', '#{currentSearch}');
+          }
+          window.location.href = url.toString();
+        });
+      });
+      
+      // change sort + order, keep other params intact
+      sortOptions.forEach(link => {
+        link.addEventListener('click', e => {
+          e.preventDefault();
+          const url   = new URL(window.location);
+          const sort  = link.dataset.sort;
+          const order = link.dataset.order;
+          url.searchParams.set('sort', sort);
+          url.searchParams.set('order', order);
+          window.location.href = url.toString();
+        });
+      });
+    });

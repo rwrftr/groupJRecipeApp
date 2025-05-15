@@ -1,0 +1,26 @@
+extends layout
+
+block content
+  .container.py-5
+    // Header
+    .row.mb-4
+      .col-md-8
+        if currentCategory
+          h1 #{currentCategory} Recipes
+        else if currentSearch
+          h1 Search Results: #{currentSearch}
+        else
+          h1 Explore Recipes
+        p.lead Discover delicious recipes shared by our community
+      .col-md-4
+        form.d-flex(action="/explore", method="GET")
+          if currentCategory
+            input(type="hidden", name="category", value=currentCategory)
+          input.form-control.me-2(
+            type="search", 
+            name="search", 
+            placeholder="Search recipes...", 
+            value=currentSearch
+          )
+          button.btn.btn-primary(type="submit")
+            i.fas.fa-search

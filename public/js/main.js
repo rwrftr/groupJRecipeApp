@@ -164,9 +164,6 @@ function initializeRatingSystem() {
     input.addEventListener('mouseleave', () => {
       stars.forEach(s => s.classList.remove('hover'));
     });
-  });
-}
-
 
 // -------------------------
 // Recipe Filtering & Sorting

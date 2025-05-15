@@ -129,3 +129,24 @@ const createTables = async () => {
     }
   };
   
+  // basic ping to test db connection
+const testConnection = async () => {
+    try {
+      await run('SELECT 1');
+      console.log('Database connection test successful');
+      return true;
+    } catch (error) {
+      console.error('Database connection test failed:', error);
+      return false;
+    }
+  };
+  
+  // export connection + query functions
+  module.exports = {
+    db,
+    run,
+    all,
+    get,
+    testConnection
+  };
+  

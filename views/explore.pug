@@ -1,8 +1,9 @@
 extends layout
 
+//- Browse / search page for recipes
 block content
   .container.py-5
-    // Header
+    //- Header
     .row.mb-4
       .col-md-8
         if currentCategory
@@ -13,6 +14,7 @@ block content
           h1 Explore Recipes
         p.lead Discover delicious recipes shared by our community
       .col-md-4
+        //- quick search box (keeps current category if present)
         form.d-flex(action="/explore", method="GET")
           if currentCategory
             input(type="hidden", name="category", value=currentCategory)
@@ -24,3 +26,85 @@ block content
           )
           button.btn.btn-primary(type="submit")
             i.fas.fa-search
+        
+        //- ---------- Sidebar filters + main grid ----------
+    .row.mb-4
+      //- ------- Category list on the left -------
+      .col-md-3
+        .card.shadow-sm.mb-4
+          .card-header.bg-primary.text-white
+            h5.card-title.mb-0 Categories
+          .card-body.p-0
+            ul.list-group.list-group-flush
+              li.list-group-item
+                a.category-filter.text-decoration-none(
+                  href="/explore",
+                  data-category="",
+                  class=!currentCategory ? "fw-bold text-primary" : "text-dark"
+                ) All Categories
+              each category in categories || []
+                li.list-group-item
+                  a.category-filter.text-decoration-none(
+                    href=`/explore?category=${category}`,
+                    data-category=category,
+                    class=currentCategory === category ? "fw-bold text-primary" : "text-dark"
+                  )= category
+      
+      //- ------- Recipe grid + sort dropdown -------
+      .col-md-9
+        //- Sorting dropdown bar
+        .card.shadow-sm.mb-4
+          .card-body.d-flex.justify-content-between.align-items-center
+            span.text-muted
+              if recipes && recipes.length
+                | Showing #{recipes.length} recipe(s)
+              else
+                | No recipes found
+            .dropdown
+              button.btn.btn-outline-secondary.dropdown-toggle(
+                type="button",
+                data-bs-toggle="dropdown"
+              )
+                i.fas.fa-sort.me-1
+                | Sort by:
+                span.fw-bold= currentSort === 'avg_rating'
+                  ? 'Rating'
+                  : currentSort === 'title'
+                    ? 'Title'
+                    : 'Newest'
+              ul.dropdown-menu.dropdown-menu-end
+                li
+                  a.dropdown-item.sort-option(
+                    href="#",
+                    data-sort="created_at",
+                    data-order="desc",
+                    class=currentSort === 'created_at' && currentOrder === 'desc' ? 'active' : ''
+                  ) Newest First
+                li
+                  a.dropdown-item.sort-option(
+                    href="#",
+                    data-sort="created_at",
+                    data-order="asc",
+                    class=currentSort === 'created_at' && currentOrder === 'asc' ? 'active' : ''
+                  ) Oldest First
+                li
+                  a.dropdown-item.sort-option(
+                    href="#",
+                    data-sort="avg_rating",
+                    data-order="desc",
+                    class=currentSort === 'avg_rating' && currentOrder === 'desc' ? 'active' : ''
+                  ) Highest Rated
+                li
+                  a.dropdown-item.sort-option(
+                    href="#",
+                    data-sort="title",
+                    data-order="asc",
+                    class=currentSort === 'title' && currentOrder === 'asc' ? 'active' : ''
+                  ) Title (A-Z)
+                li
+                  a.dropdown-item.sort-option(
+                    href="#",
+                    data-sort="title",
+                    data-order="desc",
+                    class=currentSort === 'title' && currentOrder === 'desc' ? 'active' : ''
+                  ) Title (Z-A)

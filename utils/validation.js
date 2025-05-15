@@ -1,4 +1,4 @@
-const { body } = require('express-validator');
+const { body, validationResult } = require('express-validator');
 
 // user form validation
 const userValidationRules = () => {
@@ -31,11 +31,6 @@ const userValidationRules = () => {
       })
   ];
 };
-
-module.exports = {
-  userValidationRules
-};
-const { body } = require('express-validator');
 
 // recipe form validation
 const recipeValidationRules = () => {
@@ -92,12 +87,6 @@ const ratingValidationRules = () => {
   ];
 };
 
-module.exports = {
-  recipeValidationRules,
-  ratingValidationRules
-};
-const { validationResult } = require('express-validator');
-
 // shared middleware to handle validation results
 const validate = (req, res, next) => {
   const errors = validationResult(req);
@@ -124,5 +113,8 @@ const validate = (req, res, next) => {
 };
 
 module.exports = {
+  userValidationRules,
+  recipeValidationRules,
+  ratingValidationRules,
   validate
 };

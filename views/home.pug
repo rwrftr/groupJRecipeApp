@@ -5,7 +5,7 @@ block content
   //- Hero Section
   //- -------------------------------------------------------------
   //- This top banner welcomes visitors, explains what the site does,
-  //- and offers buttons to explore recipes or, if you’re logged in,
+  //- and offers buttons to explore recipes or, if you're logged in,
   //- to share your own creations.
   .hero-section.py-5.bg-light
     .container
@@ -13,7 +13,7 @@ block content
         .col-md-6
           //- Big, friendly headline
           h1.display-4 Share Your Culinary Creations
-          //- Short tagline explaining the site’s purpose
+          //- Short tagline explaining the site's purpose
           p.lead Discover, create, and share delicious recipes with food enthusiasts around the world.
           .mt-4
             //- Primary button always takes you to the Explore page
@@ -36,7 +36,7 @@ block content
   //- Categories Section
   //- -------------------------------------------------------------
   //- Show up to eight recipe categories as clickable cards.
-  //- If no categories exist yet, display a friendly “no data” message.
+  //- If no categories exist yet, display a friendly "no data" message.
   section.py-5.bg-white
     .container
       h2.text-center.mb-4 Browse by Category
@@ -64,7 +64,7 @@ block content
   //- Latest Recipes Section
   //- -------------------------------------------------------------
   //- Display the newest recipes in a grid of cards.
-  //- If there aren’t any, show a message instead.
+  //- If there aren't any, show a message instead.
   section.py-5.bg-light
     .container
       .d-flex.justify-content-between.align-items-center.mb-4
@@ -84,9 +84,9 @@ block content
                 //- Recipe title
                 h5.card-title= recipe.title
                 //- Short text snippet (first 80 characters) for preview
-                p.card-text.text-muted.small=
-                  recipe.description.substring(0, 80)
-                  + (recipe.description.length > 80 ? '…' : '')
+                - var description = recipe.description || ''
+                - var truncatedDesc = description.length > 80 ? description.substring(0, 80) + '...' : description
+                p.card-text.text-muted.small= truncatedDesc
                 .d-flex.justify-content-between.align-items-center
                   .rating
                     //- Calculate a rounded star rating out of five
@@ -134,9 +134,9 @@ block content
                   .card-body
                     h5.card-title= recipe.title
                     //- A slightly longer snippet (100 characters) here
-                    p.card-text.text-muted.small=
-                      recipe.description.substring(0, 100)
-                      + (recipe.description.length > 100 ? '…' : '')
+                    - var description = recipe.description || ''
+                    - var truncatedDesc = description.length > 100 ? description.substring(0, 100) + '...' : description
+                    p.card-text.text-muted.small= truncatedDesc
                     .d-flex.justify-content-between.align-items-center.mt-3
                       .rating
                         - const rating = Math.round(recipe.avg_rating || 0)
@@ -148,7 +148,7 @@ block content
                         //- Display average rating and total count of reviews
                         span.ms-1= (recipe.avg_rating || 0).toFixed(1)
                         span.text-muted.ms-1 (#{recipe.rating_count || 0})
-                      //- Button linking to the recipe’s detail page
+                      //- Button linking to the recipe's detail page
                       a.btn.btn-sm.btn-primary(href=`/recipes/${recipe.id}`) View Recipe
         else
           //- If no popular recipes are available, show a placeholder message
@@ -158,7 +158,7 @@ block content
   //- -------------------------------------------------------------
   //- Call to Action Section
   //- -------------------------------------------------------------
-  //- Encourage visitors to join or contribute if they haven’t already.
+  //- Encourage visitors to join or contribute if they haven't already.
   section.py-5.bg-primary.text-white.text-center
     .container
       h2.mb-3 Ready to share your favorite recipe?

@@ -9,8 +9,8 @@
 //-   • A consistent footer with site info and social links
 //- 
 //- Available variables:
-//-   • title   – Text shown in the browser tab (e.g., “Home”, “Explore”)
-//-   • user    – The logged-in user object (or null if nobody’s signed in)
+//-   • title   – Text shown in the browser tab (e.g., "Home", "Explore")
+//-   • user    – The logged-in user object (or null if nobody's signed in)
 //-   • success – A one-time success message to display in an alert
 //-   • error   – A one-time error message to display in an alert
 //-
@@ -31,7 +31,7 @@ html(lang="en")
     //- ----------------------------------------------------------------
     //- Stylesheets
     //- ----------------------------------------------------------------
-    //- Load Bootstrap’s core CSS for grid, utilities, and components.
+    //- Load Bootstrap's core CSS for grid, utilities, and components.
     link(
       href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css"
       rel="stylesheet"
@@ -44,7 +44,7 @@ html(lang="en")
     //- Our custom CSS file where we override Bootstrap and add site styles.
     link(rel="stylesheet", href="/css/style.css")
 
-     body
+  body
     //- ----------------------------------------------------------------
     //- Navigation Bar
     //- ----------------------------------------------------------------
@@ -72,7 +72,7 @@ html(lang="en")
               a.nav-link(href="/") Home
             li.nav-item
               a.nav-link(href="/explore") Explore
-            //- Only show “Create Recipe” if someone is logged in.
+            //- Only show "Create Recipe" if someone is logged in.
             if user
               li.nav-item
                 a.nav-link(href="/recipes/new") Create Recipe
@@ -80,7 +80,7 @@ html(lang="en")
           //- ----------------------------------------------------------------
           //- Recipe Search Form
           //- ----------------------------------------------------------------
-          //- A GET form that sends the query as “q” to /search.
+          //- A GET form that sends the query as "q" to /search.
           form.d-flex.me-2(action="/search", method="GET")
             input.form-control.me-2(
               type="search"
@@ -102,7 +102,7 @@ html(lang="en")
                   href="#"
                   data-bs-toggle="dropdown"
                 )
-                  //- Display the user’s profile picture and name.
+                  //- Display the user's profile picture and name.
                   img.rounded-circle.me-1(
                     src=`/${user.profile_image}`
                     width="24"
@@ -117,14 +117,14 @@ html(lang="en")
                     a.dropdown-item(href="/users/edit-profile") Edit Profile
                   li
                     a.dropdown-item(href="/users/logout") Logout
-            //- If nobody’s logged in, show links to log in or register.
+            //- If nobody's logged in, show links to log in or register.
             else
               li.nav-item
                 a.nav-link(href="/users/login") Login
               li.nav-item
                 a.nav-link(href="/users/register") Register
 
-                 //- ----------------------------------------------------------------
+    //- ----------------------------------------------------------------
     //- Flash Message Alerts
     //- ----------------------------------------------------------------
     //- When the server sets a success or error message, display it at the top.
@@ -143,7 +143,7 @@ html(lang="en")
     //- ----------------------------------------------------------------
     //- Main Content Area
     //- ----------------------------------------------------------------
-    //- This is where each page’s unique content gets injected.
+    //- This is where each page's unique content gets injected.
     //- Example: the recipe list, recipe detail, login form, etc.
     main.py-4
       block content
